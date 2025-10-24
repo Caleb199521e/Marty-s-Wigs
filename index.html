@@ -1,0 +1,1260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Marty's Wigs & Makeover offers premium wig styling, coloring, installation, and professional makeup services. Book your transformation today!">
+    <meta name="keywords" content="wigs, wig styling, makeup, bridal makeup, wig installation, hair treatment">
+    <meta name="author" content="Marty's Wigs & Makeover">
+    
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Marty's Wigs & Makeover - Redefining Beauty with Confidence">
+    <meta property="og:description" content="Experience premium wig styling and professional makeup services tailored to enhance your natural beauty.">
+    <meta property="og:image" content="/images/og-image.jpg">
+    
+    <title>Marty's Wigs & Makeover - Redefining Beauty with Confidence</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'brand-pink': '#f8d7da',
+                        'brand-pink-dark': '#e9b4b9',
+                        'brand-beige': '#f9f3e9',
+                        'brand-gold': '#d4af37',
+                    },
+                    fontFamily: {
+                        'heading': ['Playfair Display', 'serif'],
+                        'body': ['Poppins', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Custom Styles -->
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s, transform 0.6s;
+        }
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .lightbox.active {
+            display: flex;
+        }
+        .lightbox img {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 8px;
+        }
+        
+        /* Skip to main content link */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: #000;
+            color: white;
+            padding: 8px;
+            text-decoration: none;
+            z-index: 100;
+        }
+        .skip-link:focus {
+            top: 0;
+        }
+        
+        /* Form validation styles */
+        .error-message {
+            color: #dc2626;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+            display: none;
+        }
+        .error-message.visible {
+            display: block;
+        }
+        input.error, select.error, textarea.error {
+            border-color: #dc2626;
+        }
+    </style>
+    
+    <!-- Add API configuration -->
+    <script>
+        // API Configuration
+        const API_BASE_URL = 'http://localhost:5000/api';
+    </script>
+</head>
+<body class="font-body text-gray-700 bg-brand-beige">
+    <!-- Skip to main content -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
+    <!-- Loading Spinner -->
+    <div id="loading" class="fixed inset-0 bg-white z-50 flex items-center justify-center">
+        <div class="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-brand-gold"></div>
+    </div>
+
+    <!-- Navbar -->
+    <nav id="navbar" class="fixed top-0 w-full bg-white shadow-md z-40 transition-all duration-300">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <!-- Logo -->
+            <a href="#" class="flex items-center">
+                <span class="font-heading text-2xl text-pink-600">Marty's Wigs & Makeover</span>
+            </a>
+            
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex space-x-8">
+                <a href="#home" class="text-gray-700 hover:text-pink-600 transition-colors">Home</a>
+                <a href="#about" class="text-gray-700 hover:text-pink-600 transition-colors">About</a>
+                <a href="#services" class="text-gray-700 hover:text-pink-600 transition-colors">Services</a>
+                <a href="#gallery" class="text-gray-700 hover:text-pink-600 transition-colors">Gallery</a>
+                <a href="#booking" class="text-gray-700 hover:text-pink-600 transition-colors">Booking</a>
+                <a href="#contact" class="text-gray-700 hover:text-pink-600 transition-colors">Contact</a>
+            </div>
+            
+            <!-- Mobile Menu Button -->
+            <button id="mobile-menu-button" class="md:hidden text-gray-700">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="md:hidden bg-white py-4 px-4 shadow-lg hidden">
+            <div class="flex flex-col space-y-4">
+                <a href="#home" class="text-gray-700 hover:text-pink-600 transition-colors py-2">Home</a>
+                <a href="#about" class="text-gray-700 hover:text-pink-600 transition-colors py-2">About</a>
+                <a href="#services" class="text-gray-700 hover:text-pink-600 transition-colors py-2">Services</a>
+                <a href="#gallery" class="text-gray-700 hover:text-pink-600 transition-colors py-2">Gallery</a>
+                <a href="#booking" class="text-gray-700 hover:text-pink-600 transition-colors py-2">Booking</a>
+                <a href="#contact" class="text-gray-700 hover:text-pink-600 transition-colors py-2">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="main-content">
+        <!-- Home Section -->
+        <section id="home" class="pt-20 pb-16 md:pt-32 md:pb-24 bg-gradient-to-r from-brand-pink to-white">
+            <div class="container mx-auto px-4">
+                <div class="flex flex-col md:flex-row items-center">
+                    <div class="md:w-1/2 mb-10 md:mb-0 fade-in">
+                        <h1 class="font-heading text-4xl md:text-5xl lg:text-6xl text-gray-800 mb-6">Redefining Beauty with Confidence.</h1>
+                        <p class="text-lg text-gray-600 mb-8">Experience premium wig styling and professional makeup services tailored to enhance your natural beauty.</p>
+                        <a href="#booking" class="inline-block bg-pink-600 text-white px-8 py-3 rounded-full font-medium hover:bg-pink-700 transition-colors shadow-lg">Book Appointment</a>
+                    </div>
+                    <div class="md:w-1/2 fade-in">
+                        <div class="bg-white p-2 rounded-xl shadow-xl">
+                            <!-- Hero image placeholder - replace with actual image -->
+                            <div class="bg-gray-200 h-64 md:h-80 rounded-lg flex items-center justify-center">
+                                <span class="text-gray-500">Hero Image</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Mini Gallery -->
+        <section class="py-12 bg-white">
+            <div class="container mx-auto px-4">
+                <h2 class="font-heading text-3xl text-center mb-12">Our Transformations</h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <!-- Gallery items - replace with actual images -->
+                    <div class="bg-gray-200 h-40 rounded-lg flex items-center justify-center">
+                        <span class="text-gray-500">Gallery Image</span>
+                    </div>
+                    <div class="bg-gray-200 h-40 rounded-lg flex items-center justify-center">
+                        <span class="text-gray-500">Gallery Image</span>
+                    </div>
+                    <div class="bg-gray-200 h-40 rounded-lg flex items-center justify-center">
+                        <span class="text-gray-500">Gallery Image</span>
+                    </div>
+                    <div class="bg-gray-200 h-40 rounded-lg flex items-center justify-center">
+                        <span class="text-gray-500">Gallery Image</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Why Choose Us -->
+        <section class="py-16 bg-brand-beige">
+            <div class="container mx-auto px-4">
+                <h2 class="font-heading text-3xl text-center mb-12">Why Choose Marty's?</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="bg-white p-6 rounded-xl shadow-md fade-in">
+                        <div class="w-12 h-12 bg-brand-pink rounded-full flex items-center justify-center mb-4">
+                            <svg class="w-6 h-6 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="font-heading text-xl mb-2">Expert Stylists</h3>
+                        <p class="text-gray-600">Our team of certified professionals has years of experience in wig styling and makeup artistry.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md fade-in">
+                        <div class="w-12 h-12 bg-brand-pink rounded-full flex items-center justify-center mb-4">
+                            <svg class="w-6 h-6 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="font-heading text-xl mb-2">Premium Products</h3>
+                        <p class="text-gray-600">We use only high-quality, professional-grade products for all our services.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md fade-in">
+                        <div class="w-12 h-12 bg-brand-pink rounded-full flex items-center justify-center mb-4">
+                            <svg class="w-6 h-6 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="font-heading text-xl mb-2">Personalized Service</h3>
+                        <p class="text-gray-600">Every service is customized to match your unique style, preferences, and needs.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials -->
+        <section class="py-16 bg-white">
+            <div class="container mx-auto px-4">
+                <h2 class="font-heading text-3xl text-center mb-12">What Our Clients Say</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="bg-brand-beige p-6 rounded-xl fade-in">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 bg-gray-300 rounded-full mr-4"></div>
+                            <div>
+                                <h4 class="font-medium">Sarah J.</h4>
+                                <div class="flex text-yellow-400">
+                                    ★★★★★
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-gray-600">"Marty transformed my look for my wedding day. The makeup was flawless and lasted all day. Highly recommend!"</p>
+                    </div>
+                    <div class="bg-brand-beige p-6 rounded-xl fade-in">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 bg-gray-300 rounded-full mr-4"></div>
+                            <div>
+                                <h4 class="font-medium">Michelle T.</h4>
+                                <div class="flex text-yellow-400">
+                                    ★★★★★
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-gray-600">"The wig maintenance service brought my favorite wig back to life! It looks even better than when I first bought it."</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="py-16 bg-brand-beige">
+            <div class="container mx-auto px-4">
+                <div class="flex flex-col md:flex-row items-center">
+                    <div class="md:w-1/2 mb-10 md:mb-0 fade-in">
+                        <div class="bg-white p-2 rounded-xl shadow-md">
+                            <!-- About image placeholder - replace with actual image -->
+                            <div class="bg-gray-200 h-64 md:h-80 rounded-lg flex items-center justify-center">
+                                <span class="text-gray-500">About Image</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="md:w-1/2 md:pl-12 fade-in">
+                        <h2 class="font-heading text-3xl mb-6">Our Story</h2>
+                        <p class="text-gray-600 mb-4">Marty's Wigs & Makeover was founded with a passion for helping individuals rediscover their confidence through personalized beauty services.</p>
+                        <p class="text-gray-600 mb-6">With years of experience in the industry, our team specializes in creating custom wig solutions and stunning makeup looks for all occasions.</p>
+                        <div class="bg-white p-6 rounded-lg shadow-sm">
+                            <h3 class="font-heading text-xl mb-4 text-center">Why Choose Marty's?</h3>
+                            <ul class="text-gray-600 space-y-2">
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-brand-gold mr-2 mt-0.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    <span>Expert wig customization and styling</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-brand-gold mr-2 mt-0.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    <span>Professional makeup for all occasions</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-brand-gold mr-2 mt-0.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    <span>Premium products and techniques</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-brand-gold mr-2 mt-0.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    <span>10% loyalty discount for referrals</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section id="services" class="py-16 bg-white">
+            <div class="container mx-auto px-4">
+                <h2 class="font-heading text-3xl text-center mb-12">Our Services</h2>
+                
+                <!-- Tabs -->
+                <div class="flex justify-center mb-8">
+                    <div class="inline-flex rounded-md shadow-sm">
+                        <button id="wig-tab" class="px-6 py-3 rounded-l-lg bg-pink-600 text-white font-medium">Wig Services</button>
+                        <button id="makeup-tab" class="px-6 py-3 rounded-r-lg bg-gray-200 text-gray-700 font-medium">Makeup Services</button>
+                    </div>
+                </div>
+                
+                <!-- Wig Services Content -->
+                <div id="wig-services" class="fade-in">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="bg-brand-beige p-6 rounded-xl shadow-sm">
+                            <h3 class="font-heading text-xl mb-4">Personalized Wig Styling</h3>
+                            <p class="text-gray-600 mb-4">Custom wig cuts, styles, and treatments tailored to your face shape and personal preferences.</p>
+                            <div class="bg-white p-4 rounded-lg">
+                                <h4 class="font-medium mb-2">Price Ranges by Inches:</h4>
+                                <ul class="text-gray-600">
+                                    <li>12-14 inches: $80 - $120</li>
+                                    <li>16-18 inches: $100 - $150</li>
+                                    <li>20-22 inches: $120 - $180</li>
+                                    <li>24+ inches: $150 - $220</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="bg-brand-beige p-6 rounded-xl shadow-sm">
+                            <h3 class="font-heading text-xl mb-4">Coloring & Maintenance</h3>
+                            <p class="text-gray-600 mb-4">Professional coloring, bleaching, revamping, and maintenance services to keep your wigs looking flawless.</p>
+                            <div class="bg-white p-4 rounded-lg">
+                                <h4 class="font-medium mb-2">Services Include:</h4>
+                                <ul class="text-gray-600">
+                                    <li>Custom coloring and bleaching</li>
+                                    <li>Wig repair and restoration</li>
+                                    <li>Deep conditioning treatments</li>
+                                    <li>Styling product application</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="bg-brand-beige p-6 rounded-xl shadow-sm">
+                            <h3 class="font-heading text-xl mb-4">Frontal & Closure Installation</h3>
+                            <p class="text-gray-600 mb-4">Expert installation of frontal and closure pieces for a natural, seamless look.</p>
+                            <div class="bg-white p-4 rounded-lg">
+                                <h4 class="font-medium mb-2">Installation Options:</h4>
+                                <ul class="text-gray-600">
+                                    <li>360 Frontal Installation: $150 - $250</li>
+                                    <li>Full Frontal Installation: $120 - $200</li>
+                                    <li>Closure Installation: $80 - $150</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="bg-brand-beige p-6 rounded-xl shadow-sm">
+                            <h3 class="font-heading text-xl mb-4">Hair Treatments & Revamping</h3>
+                            <p class="text-gray-600 mb-4">Specialized treatments to restore and revitalize your wigs and natural hair.</p>
+                            <div class="bg-white p-4 rounded-lg">
+                                <h4 class="font-medium mb-2">Treatment Options:</h4>
+                                <ul class="text-gray-600">
+                                    <li>Protein treatments</li>
+                                    <li>Moisture restoration</li>
+                                    <li>Color correction</li>
+                                    <li>Custom repair services</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Makeup Services Content -->
+                <div id="makeup-services" class="hidden fade-in">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="bg-brand-beige p-6 rounded-xl shadow-sm">
+                            <h3 class="font-heading text-xl mb-4">Standard Makeup</h3>
+                            <p class="text-gray-600 mb-4">Perfect for everyday wear or special occasions, our standard makeup service enhances your natural features.</p>
+                            <div class="bg-white p-4 rounded-lg">
+                                <h4 class="font-medium mb-2">Price: $60 - $80</h4>
+                                <p class="text-gray-600">Includes consultation, application, and light touch-ups.</p>
+                            </div>
+                        </div>
+                        <div class="bg-brand-beige p-6 rounded-xl shadow-sm">
+                            <h3 class="font-heading text-xl mb-4">Evening & Photoshoot Makeup</h3>
+                            <p class="text-gray-600 mb-4">Dramatic, long-lasting makeup designed for evening events or professional photography.</p>
+                            <div class="bg-white p-4 rounded-lg">
+                                <h4 class="font-medium mb-2">Price: $90 - $120</h4>
+                                <p class="text-gray-600">Includes false lashes, detailed contouring, and professional setting.</p>
+                            </div>
+                        </div>
+                        <div class="bg-brand-beige p-6 rounded-xl shadow-sm">
+                            <h3 class="font-heading text-xl mb-4">Bridal Makeup</h3>
+                            <p class="text-gray-600 mb-4">Our signature bridal service ensures you look radiant on your special day with makeup that lasts from ceremony to reception.</p>
+                            <div class="bg-white p-4 rounded-lg">
+                                <h4 class="font-medium mb-2">Price: $150 - $250</h4>
+                                <p class="text-gray-600">Includes trial session, day-of application, and touch-up kit.</p>
+                            </div>
+                        </div>
+                        <div class="bg-brand-beige p-6 rounded-xl shadow-sm">
+                            <h3 class="font-heading text-xl mb-4">Bridal Party Packages</h3>
+                            <p class="text-gray-600 mb-4">Special rates for bridal parties to ensure everyone looks their best on your big day.</p>
+                            <div class="bg-white p-4 rounded-lg">
+                                <h4 class="font-medium mb-2">Packages Start at: $100/person</h4>
+                                <p class="text-gray-600">Group discounts available for parties of 3 or more.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-8 bg-pink-50 p-6 rounded-xl">
+                        <h4 class="font-medium text-lg mb-2">Important Notes:</h4>
+                        <ul class="text-gray-600 list-disc pl-5 space-y-1">
+                            <li>Travel fees may apply for services outside our studio location</li>
+                            <li>Bridal services require a 50% deposit to secure your date</li>
+                            <li>All prices are subject to change based on specific requirements</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Gallery Section -->
+        <section id="gallery" class="py-16 bg-brand-beige">
+            <div class="container mx-auto px-4">
+                <h2 class="font-heading text-3xl text-center mb-12">Our Gallery</h2>
+                
+                <!-- Filter Buttons -->
+                <div class="flex justify-center mb-8 overflow-x-auto">
+                    <div class="inline-flex rounded-md shadow-sm">
+                        <button data-filter="all" class="px-4 py-2 bg-pink-600 text-white rounded-l-lg">All</button>
+                        <button data-filter="makeovers" class="px-4 py-2 bg-gray-200 text-gray-700">Makeovers</button>
+                        <button data-filter="wigs" class="px-4 py-2 bg-gray-200 text-gray-700">Wigs</button>
+                        <button data-filter="bridal" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-r-lg">Bridal Looks</button>
+                    </div>
+                </div>
+                
+                <!-- Gallery Grid -->
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    <!-- Gallery items - replace with actual images -->
+                    <div class="gallery-item makeovers fade-in">
+                        <div class="bg-gray-200 h-48 rounded-lg flex items-center justify-center cursor-pointer gallery-image">
+                            <span class="text-gray-500">Makeover Image</span>
+                        </div>
+                    </div>
+                    <div class="gallery-item wigs fade-in">
+                        <div class="bg-gray-200 h-48 rounded-lg flex items-center justify-center cursor-pointer gallery-image">
+                            <span class="text-gray-500">Wig Image</span>
+                        </div>
+                    </div>
+                    <div class="gallery-item bridal fade-in">
+                        <div class="bg-gray-200 h-48 rounded-lg flex items-center justify-center cursor-pointer gallery-image">
+                            <span class="text-gray-500">Bridal Image</span>
+                        </div>
+                    </div>
+                    <div class="gallery-item makeovers fade-in">
+                        <div class="bg-gray-200 h-48 rounded-lg flex items-center justify-center cursor-pointer gallery-image">
+                            <span class="text-gray-500">Makeover Image</span>
+                        </div>
+                    </div>
+                    <div class="gallery-item wigs fade-in">
+                        <div class="bg-gray-200 h-48 rounded-lg flex items-center justify-center cursor-pointer gallery-image">
+                            <span class="text-gray-500">Wig Image</span>
+                        </div>
+                    </div>
+                    <div class="gallery-item bridal fade-in">
+                        <div class="bg-gray-200 h-48 rounded-lg flex items-center justify-center cursor-pointer gallery-image">
+                            <span class="text-gray-500">Bridal Image</span>
+                        </div>
+                    </div>
+                    <div class="gallery-item makeovers fade-in">
+                        <div class="bg-gray-200 h-48 rounded-lg flex items-center justify-center cursor-pointer gallery-image">
+                            <span class="text-gray-500">Makeover Image</span>
+                        </div>
+                    </div>
+                    <div class="gallery-item wigs fade-in">
+                        <div class="bg-gray-200 h-48 rounded-lg flex items-center justify-center cursor-pointer gallery-image">
+                            <span class="text-gray-500">Wig Image</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Booking Section -->
+        <section id="booking" class="py-16 bg-white">
+            <div class="container mx-auto px-4">
+                <h2 class="font-heading text-3xl text-center mb-12">Book Your Appointment</h2>
+                <div class="max-w-2xl mx-auto bg-brand-beige p-8 rounded-xl shadow-md">
+                    <form id="booking-form" class="space-y-6" novalidate>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="name" class="block text-gray-700 mb-2">Full Name <span class="text-red-500">*</span></label>
+                                <input 
+                                    type="text" 
+                                    id="name" 
+                                    name="name" 
+                                    required 
+                                    aria-required="true"
+                                    aria-describedby="name-error"
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500"
+                                >
+                                <span id="name-error" class="error-message" role="alert">Please enter your full name</span>
+                            </div>
+                            <div>
+                                <label for="contact" class="block text-gray-700 mb-2">Phone Number <span class="text-red-500">*</span></label>
+                                <input 
+                                    type="tel" 
+                                    id="contact" 
+                                    name="contact" 
+                                    required 
+                                    aria-required="true"
+                                    aria-describedby="contact-error"
+                                    placeholder="+234 xxx xxx xxxx"
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500"
+                                >
+                                <span id="contact-error" class="error-message" role="alert">Please enter a valid phone number</span>
+                            </div>
+                        </div>
+                        <div>
+                            <label for="email" class="block text-gray-700 mb-2">Email Address</label>
+                            <input 
+                                type="email" 
+                                id="email" 
+                                name="email"
+                                aria-describedby="email-error"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500"
+                            >
+                            <span id="email-error" class="error-message" role="alert">Please enter a valid email address</span>
+                        </div>
+                        <div>
+                            <label for="service" class="block text-gray-700 mb-2">Service Type <span class="text-red-500">*</span></label>
+                            <select 
+                                id="service" 
+                                name="service" 
+                                required 
+                                aria-required="true"
+                                aria-describedby="service-error"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500"
+                            >
+                                <option value="">Select a service</option>
+                                <optgroup label="Wig Services">
+                                    <option value="wig-styling">Personalized Wig Styling</option>
+                                    <option value="wig-coloring">Wig Coloring & Maintenance</option>
+                                    <option value="frontal-installation">Frontal & Closure Installation</option>
+                                    <option value="hair-treatment">Hair Treatments & Revamping</option>
+                                </optgroup>
+                                <optgroup label="Makeup Services">
+                                    <option value="standard-makeup">Standard Makeup</option>
+                                    <option value="evening-makeup">Evening & Photoshoot Makeup</option>
+                                    <option value="bridal-makeup">Bridal Makeup</option>
+                                    <option value="bridal-package">Bridal Party Package</option>
+                                </optgroup>
+                            </select>
+                            <span id="service-error" class="error-message" role="alert">Please select a service</span>
+                        </div>
+                        <div>
+                            <label for="date" class="block text-gray-700 mb-2">Preferred Date <span class="text-red-500">*</span></label>
+                            <input 
+                                type="date" 
+                                id="date" 
+                                name="date" 
+                                required 
+                                aria-required="true"
+                                aria-describedby="date-error"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500"
+                            >
+                            <span id="date-error" class="error-message" role="alert">Please select a date</span>
+                        </div>
+                        <div>
+                            <label for="notes" class="block text-gray-700 mb-2">Additional Notes</label>
+                            <textarea 
+                                id="notes" 
+                                name="notes" 
+                                rows="4" 
+                                aria-describedby="notes-help"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500"
+                            ></textarea>
+                            <span id="notes-help" class="text-sm text-gray-500">Any special requests or questions?</span>
+                        </div>
+                        
+                        <div id="form-message" class="hidden p-4 rounded-lg" role="alert"></div>
+                        
+                        <button 
+                            type="submit" 
+                            id="submit-btn"
+                            class="w-full bg-pink-600 text-white py-3 rounded-lg font-medium hover:bg-pink-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                            Send Booking Request
+                        </button>
+                        
+                        <p class="text-sm text-gray-600 text-center">
+                            <strong>Note:</strong> Payments made are non-refundable. A deposit may be required to confirm your booking.
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="py-16 bg-brand-beige">
+            <div class="container mx-auto px-4">
+                <h2 class="font-heading text-3xl text-center mb-12">Get In Touch</h2>
+                <div class="flex flex-col md:flex-row gap-8">
+                    <div class="md:w-1/2">
+                        <div class="bg-white p-6 rounded-xl shadow-md mb-6">
+                            <h3 class="font-heading text-xl mb-4">Contact Information</h3>
+                            <div class="space-y-4">
+                                <div class="flex items-start">
+                                    <svg class="w-5 h-5 text-pink-600 mr-3 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    </svg>
+                                    <div>
+                                        <h4 class="font-medium">Studio Location</h4>
+                                        <p class="text-gray-600">[Address will be added here]</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start">
+                                    <svg class="w-5 h-5 text-pink-600 mr-3 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                                    </svg>
+                                    <div>
+                                        <h4 class="font-medium">Phone</h4>
+                                        <p class="text-gray-600">[Phone number will be added here]</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start">
+                                    <svg class="w-5 h-5 text-pink-600 mr-3 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                                    </svg>
+                                    <div>
+                                        <h4 class="font-medium">Email</h4>
+                                        <p class="text-gray-600">[Email will be added here]</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white p-6 rounded-xl shadow-md">
+                            <h3 class="font-heading text-xl mb-4">Follow Us</h3>
+                            <div class="flex space-x-4">
+                                <a href="https://tiktok.com/@Martys_wig_and_makeover7" target="_blank" class="flex items-center justify-center w-10 h-10 bg-gray-800 text-white rounded-full hover:bg-gray-700 transition-colors">
+                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M19.589 6.686a4.793 4.793 0 01-3.77-4.245V2h-3.445v13.672a2.896 2.896 0 01-5.201 1.743l-.002-.001.002.001a2.895 2.895 0 113.183-4.51v-3.5a6.329 6.329 0 1011.335 4.15 6.33 6.33 0 01-3.385-5.968V6.686z"></path>
+                                    </svg>
+                                </a>
+                                <a href="https://instagram.com/@Martys_Makeover" target="_blank" class="flex items-center justify-center w-10 h-10 bg-pink-600 text-white rounded-full hover:bg-pink-700 transition-colors">
+                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"></path>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="md:w-1/2">
+                        <div class="bg-white p-6 rounded-xl shadow-md h-full">
+                            <h3 class="font-heading text-xl mb-4">Send Us a Message</h3>
+                            <p class="text-gray-600 mb-6">Have questions or want to discuss your specific needs? Reach out to us directly via WhatsApp.</p>
+                            <a href="https://wa.me/[PHONE_NUMBER]" target="_blank" class="inline-flex items-center justify-center w-full bg-green-500 text-white py-3 rounded-lg font-medium hover:bg-green-600 transition-colors">
+                                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893c0-3.189-1.248-6.189-3.515-8.444z"></path>
+                                </svg>
+                                Chat on WhatsApp
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <p class="font-heading text-xl">Marty's Wigs & Makeover</p>
+                    <p class="text-gray-400 mt-2">Redefining Beauty with Confidence.</p>
+                </div>
+                <div class="flex space-x-4 mb-4 md:mb-0">
+                    <a href="https://tiktok.com/@Martys_wig_and_makeover7" target="_blank" class="text-gray-400 hover:text-white transition-colors">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M19.589 6.686a4.793 4.793 0 01-3.77-4.245V2h-3.445v13.672a2.896 2.896 0 01-5.201 1.743l-.002-.001.002.001a2.895 2.895 0 113.183-4.51v-3.5a6.329 6.329 0 1011.335 4.15 6.33 6.33 0 01-3.385-5.968V6.686z"></path>
+                        </svg>
+                    </a>
+                    <a href="https://instagram.com/@Martys_Makeover" target="_blank" class="text-gray-400 hover:text-white transition-colors">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"></path>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-6 pt-6 text-center text-gray-400">
+                <p>&copy; 2023 Marty's Wigs & Makeover. All rights reserved.</p>
+                <p class="mt-2">Payments made are non-refundable.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Lightbox -->
+    <div id="lightbox" class="lightbox">
+        <button id="close-lightbox" class="absolute top-4 right-4 text-white text-2xl">&times;</button>
+        <img id="lightbox-image" src="" alt="">
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // Wait for DOM to load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Hide loading spinner
+            document.getElementById('loading').style.display = 'none';
+            
+            // Mobile menu toggle
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            
+            mobileMenuButton.addEventListener('click', function() {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            // Close mobile menu when clicking on a link
+            const mobileMenuLinks = document.querySelectorAll('#mobile-menu a');
+            mobileMenuLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    mobileMenu.classList.add('hidden');
+                });
+            });
+            
+            // Service tabs
+            const wigTab = document.getElementById('wig-tab');
+            const makeupTab = document.getElementById('makeup-tab');
+            const wigServices = document.getElementById('wig-services');
+            const makeupServices = document.getElementById('makeup-services');
+            
+            wigTab.addEventListener('click', function() {
+                wigTab.classList.remove('bg-gray-200', 'text-gray-700');
+                wigTab.classList.add('bg-pink-600', 'text-white');
+                makeupTab.classList.remove('bg-pink-600', 'text-white');
+                makeupTab.classList.add('bg-gray-200', 'text-gray-700');
+                wigServices.classList.remove('hidden');
+                makeupServices.classList.add('hidden');
+            });
+            
+            makeupTab.addEventListener('click', function() {
+                makeupTab.classList.remove('bg-gray-200', 'text-gray-700');
+                makeupTab.classList.add('bg-pink-600', 'text-white');
+                wigTab.classList.remove('bg-pink-600', 'text-white');
+                wigTab.classList.add('bg-gray-200', 'text-gray-700');
+                makeupServices.classList.remove('hidden');
+                wigServices.classList.add('hidden');
+            });
+            
+            // Gallery filter
+            const filterButtons = document.querySelectorAll('[data-filter]');
+            const galleryItems = document.querySelectorAll('.gallery-item');
+            
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const filter = this.getAttribute('data-filter');
+                    
+                    // Update active button
+                    filterButtons.forEach(btn => {
+                        btn.classList.remove('bg-pink-600', 'text-white');
+                        btn.classList.add('bg-gray-200', 'text-gray-700');
+                    });
+                    this.classList.remove('bg-gray-200', 'text-gray-700');
+                    this.classList.add('bg-pink-600', 'text-white');
+                    
+                    // Filter items
+                    galleryItems.forEach(item => {
+                        if (filter === 'all' || item.classList.contains(filter)) {
+                            item.style.display = 'block';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+                });
+            });
+            
+            // Lightbox functionality
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImage = document.getElementById('lightbox-image');
+            const closeLightbox = document.getElementById('close-lightbox');
+            const galleryImages = document.querySelectorAll('.gallery-image');
+            
+            galleryImages.forEach(image => {
+                image.addEventListener('click', function() {
+                    // In a real implementation, this would show the actual image
+                    lightboxImage.src = ''; // Set to actual image source
+                    lightboxImage.alt = 'Gallery Image';
+                    lightbox.classList.add('active');
+                });
+            });
+            
+            closeLightbox.addEventListener('click', function() {
+                lightbox.classList.remove('active');
+            });
+            
+            // Set minimum date to today
+            const dateInput = document.getElementById('date');
+            const today = new Date().toISOString().split('T')[0];
+            dateInput.setAttribute('min', today);
+            
+            // Form validation helper functions
+            function validateEmail(email) {
+                const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return re.test(email);
+            }
+            
+            function validatePhone(phone) {
+                const re = /^[\d\s\+\-\(\)]+$/;
+                return phone.length >= 10 && re.test(phone);
+            }
+            
+            function showError(inputId, message) {
+                const input = document.getElementById(inputId);
+                const errorElement = document.getElementById(inputId + '-error');
+                input.classList.add('error');
+                errorElement.textContent = message;
+                errorElement.classList.add('visible');
+            }
+            
+            function clearError(inputId) {
+                const input = document.getElementById(inputId);
+                const errorElement = document.getElementById(inputId + '-error');
+                input.classList.remove('error');
+                errorElement.classList.remove('visible');
+            }
+            
+            function showFormMessage(message, type = 'success') {
+                const messageEl = document.getElementById('form-message');
+                messageEl.textContent = message;
+                messageEl.className = type === 'success' 
+                    ? 'p-4 rounded-lg bg-green-100 text-green-700' 
+                    : 'p-4 rounded-lg bg-red-100 text-red-700';
+                messageEl.classList.remove('hidden');
+                
+                setTimeout(() => {
+                    messageEl.classList.add('hidden');
+                }, 5000);
+            }
+            
+            // Enhanced booking form validation
+            bookingForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Clear previous errors
+                ['name', 'contact', 'email', 'service', 'date'].forEach(clearError);
+                
+                let isValid = true;
+                
+                // Validate name
+                const name = document.getElementById('name').value.trim();
+                if (name.length < 2) {
+                    showError('name', 'Please enter your full name');
+                    isValid = false;
+                }
+                
+                // Validate contact
+                const contact = document.getElementById('contact').value.trim();
+                if (!validatePhone(contact)) {
+                    showError('contact', 'Please enter a valid phone number');
+                    isValid = false;
+                }
+                
+                // Validate email (if provided)
+                const email = document.getElementById('email').value.trim();
+                if (email && !validateEmail(email)) {
+                    showError('email', 'Please enter a valid email address');
+                    isValid = false;
+                }
+                
+                // Validate service selection
+                const service = document.getElementById('service').value;
+                if (!service) {
+                    showError('service', 'Please select a service');
+                    isValid = false;
+                }
+                
+                // Validate date
+                const date = document.getElementById('date').value;
+                if (!date) {
+                    showError('date', 'Please select a date');
+                    isValid = false;
+                } else {
+                    const selectedDate = new Date(date);
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0);
+                    
+                    if (selectedDate < today) {
+                        showError('date', 'Please select a future date');
+                        isValid = false;
+                    }
+                }
+                
+                if (!isValid) {
+                    return;
+                }
+                
+                // Disable submit button
+                const submitBtn = document.getElementById('submit-btn');
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Sending...';
+                
+                // Get form data
+                const formData = new FormData(bookingForm);
+                const bookingData = {
+                    name: formData.get('name'),
+                    contact: formData.get('contact'),
+                    email: formData.get('email'),
+                    service: formData.get('service'),
+                    date: formData.get('date'),
+                    notes: formData.get('notes')
+                };
+                
+                // TODO: Integrate with backend API or email service
+                // For now, create a WhatsApp message
+                const whatsappMessage = `New Booking Request:%0A%0AName: ${bookingData.name}%0APhone: ${bookingData.contact}%0AEmail: ${bookingData.email}%0AService: ${bookingData.service}%0ADate: ${bookingData.date}%0ANotes: ${bookingData.notes || 'None'}`;
+                
+                // Simulate API call
+                setTimeout(() => {
+                    console.log('Booking submitted:', bookingData);
+                    
+                    showFormMessage('Thank you for your booking request! We will contact you soon to confirm your appointment.', 'success');
+                    
+                    // Reset form
+                    bookingForm.reset();
+                    
+                    // Re-enable submit button
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Send Booking Request';
+                    
+                    // Optional: Redirect to WhatsApp
+                    // window.open(`https://wa.me/PHONE_NUMBER?text=${whatsappMessage}`, '_blank');
+                }, 1000);
+            });
+            
+            // Real-time validation
+            document.getElementById('name').addEventListener('blur', function() {
+                if (this.value.trim().length >= 2) {
+                    clearError('name');
+                }
+            });
+            
+            document.getElementById('contact').addEventListener('blur', function() {
+                if (validatePhone(this.value.trim())) {
+                    clearError('contact');
+                }
+            });
+            
+            document.getElementById('email').addEventListener('blur', function() {
+                const email = this.value.trim();
+                if (!email || validateEmail(email)) {
+                    clearError('email');
+                }
+            });
+            
+            // Fade-in animation on scroll
+            const fadeElements = document.querySelectorAll('.fade-in');
+            
+            const fadeInOnScroll = function() {
+                fadeElements.forEach(element => {
+                    const elementTop = element.getBoundingClientRect().top;
+                    const elementVisible = 150;
+                    
+                    if (elementTop < window.innerHeight - elementVisible) {
+                        element.classList.add('visible');
+                    }
+                });
+            };
+            
+            // Check on load and scroll
+            window.addEventListener('scroll', fadeInOnScroll);
+            fadeInOnScroll(); // Initial check
+            
+            // Navbar background on scroll
+            const navbar = document.getElementById('navbar');
+            
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('bg-white', 'shadow-md');
+                } else {
+                    navbar.classList.remove('bg-white', 'shadow-md');
+                }
+            });
+            
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        });
+        
+        // API Helper Functions
+        async function fetchAPI(endpoint) {
+            try {
+                const response = await fetch(`${API_BASE_URL}${endpoint}`);
+                if (!response.ok) throw new Error('API request failed');
+                return await response.json();
+            } catch (error) {
+                console.error('API Error:', error);
+                return null;
+            }
+        }
+        
+        async function postAPI(endpoint, data) {
+            try {
+                const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                if (!response.ok) throw new Error('API request failed');
+                return await response.json();
+            } catch (error) {
+                console.error('API Error:', error);
+                throw error;
+            }
+        }
+        
+        // Load Gallery from API
+        async function loadGallery(category = 'all') {
+            const galleryGrid = document.querySelector('#gallery .grid');
+            const items = await fetchAPI(`/gallery${category !== 'all' ? '?category=' + category : ''}`);
+            
+            if (items && items.length > 0) {
+                galleryGrid.innerHTML = items.map(item => `
+                    <div class="gallery-item ${item.category} fade-in">
+                        <div class="relative h-48 rounded-lg overflow-hidden cursor-pointer gallery-image" data-src="${item.imageUrl}">
+                            <img src="${item.imageUrl}" alt="${item.title}" class="w-full h-full object-cover hover:scale-110 transition-transform duration-300">
+                        </div>
+                    </div>
+                `).join('');
+                
+                // Reinitialize gallery click events
+                initGalleryLightbox();
+            }
+        }
+        
+        // Load Featured Gallery
+        async function loadFeaturedGallery() {
+            const featuredGrid = document.querySelector('.py-12.bg-white .grid');
+            const items = await fetchAPI('/gallery/featured');
+            
+            if (items && items.length > 0) {
+                featuredGrid.innerHTML = items.map(item => `
+                    <div class="relative h-40 rounded-lg overflow-hidden">
+                        <img src="${item.imageUrl}" alt="${item.title}" class="w-full h-full object-cover">
+                    </div>
+                `).join('');
+            }
+        }
+        
+        // Load Testimonials
+        async function loadTestimonials() {
+            const testimonialsGrid = document.querySelector('#testimonials .grid') || 
+                                    document.querySelector('.py-16.bg-white .grid');
+            const testimonials = await fetchAPI('/testimonials');
+            
+            if (testimonials && testimonials.length > 0) {
+                testimonialsGrid.innerHTML = testimonials.slice(0, 2).map(item => `
+                    <div class="bg-brand-beige p-6 rounded-xl fade-in">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 rounded-full mr-4 overflow-hidden bg-gray-300">
+                                ${item.clientImage ? 
+                                    `<img src="${item.clientImage}" alt="${item.clientName}" class="w-full h-full object-cover">` :
+                                    ''
+                                }
+                            </div>
+                            <div>
+                                <h4 class="font-medium">${item.clientName}</h4>
+                                <div class="flex text-yellow-400">
+                                    ${'★'.repeat(item.rating)}${'☆'.repeat(5-item.rating)}
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-gray-600">"${item.comment}"</p>
+                    </div>
+                `).join('');
+            }
+        }
+        
+        // Load Settings (Contact Info)
+        async function loadSettings() {
+            const settings = await fetchAPI('/settings');
+            
+            if (settings && settings.contact) {
+                // Update contact information
+                document.querySelectorAll('[data-contact="phone"]').forEach(el => {
+                    if (settings.contact.phone) el.textContent = settings.contact.phone;
+                });
+                document.querySelectorAll('[data-contact="email"]').forEach(el => {
+                    if (settings.contact.email) el.textContent = settings.contact.email;
+                });
+                document.querySelectorAll('[data-contact="address"]').forEach(el => {
+                    if (settings.contact.address) el.textContent = settings.contact.address;
+                });
+                
+                // Update WhatsApp link
+                if (settings.contact.whatsapp) {
+                    document.querySelectorAll('a[href*="wa.me"]').forEach(el => {
+                        el.href = `https://wa.me/${settings.contact.whatsapp}`;
+                    });
+                }
+            }
+        }
+        
+        // Initialize Gallery Lightbox
+        function initGalleryLightbox() {
+            const galleryImages = document.querySelectorAll('.gallery-image');
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImage = document.getElementById('lightbox-image');
+            
+            galleryImages.forEach(image => {
+                image.addEventListener('click', function() {
+                    const imgSrc = this.dataset.src || this.querySelector('img')?.src;
+                    if (imgSrc) {
+                        lightboxImage.src = imgSrc;
+                        lightbox.classList.add('active');
+                    }
+                });
+            });
+        }
+        
+        // Enhanced Booking Form - Send to API
+        const bookingForm = document.getElementById('booking-form');
+        if (bookingForm) {
+            bookingForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                // Clear previous errors
+                ['name', 'contact', 'email', 'service', 'date'].forEach(clearError);
+                
+                let isValid = true;
+                
+                // Validate name
+                const name = document.getElementById('name').value.trim();
+                if (name.length < 2) {
+                    showError('name', 'Please enter your full name');
+                    isValid = false;
+                }
+                
+                // Validate contact
+                const contact = document.getElementById('contact').value.trim();
+                if (!validatePhone(contact)) {
+                    showError('contact', 'Please enter a valid phone number');
+                    isValid = false;
+                }
+                
+                // Validate email (if provided)
+                const email = document.getElementById('email').value.trim();
+                if (email && !validateEmail(email)) {
+                    showError('email', 'Please enter a valid email address');
+                    isValid = false;
+                }
+                
+                // Validate service selection
+                const service = document.getElementById('service').value;
+                if (!service) {
+                    showError('service', 'Please select a service');
+                    isValid = false;
+                }
+                
+                // Validate date
+                const date = document.getElementById('date').value;
+                if (!date) {
+                    showError('date', 'Please select a date');
+                    isValid = false;
+                } else {
+                    const selectedDate = new Date(date);
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0);
+                    
+                    if (selectedDate < today) {
+                        showError('date', 'Please select a future date');
+                        isValid = false;
+                    }
+                }
+                
+                if (!isValid) {
+                    return;
+                }
+                
+                const submitBtn = document.getElementById('submit-btn');
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Sending...';
+                
+                const formData = new FormData(bookingForm);
+                const bookingData = {
+                    name: formData.get('name'),
+                    contact: formData.get('contact'),
+                    email: formData.get('email'),
+                    service: formData.get('service'),
+                    date: formData.get('date'),
+                    notes: formData.get('notes')
+                };
+                
+                try {
+                    const result = await postAPI('/bookings', bookingData);
+                    showFormMessage('Thank you! Your booking request has been submitted. We will contact you soon.', 'success');
+                    bookingForm.reset();
+                } catch (error) {
+                    showFormMessage('Sorry, there was an error submitting your booking. Please try again or contact us directly.', 'error');
+                } finally {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Send Booking Request';
+                }
+            });
+        }
+        
+        // Load all dynamic content on page load
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Load dynamic content from API
+            await Promise.all([
+                loadFeaturedGallery(),
+                loadGallery(),
+                loadTestimonials(),
+                loadSettings()
+            ]);
+        });
+    </script>
+</body>
+</html>
