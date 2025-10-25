@@ -93,7 +93,12 @@ app.use((err, req, res, next) => {
   });
 });
 
+// Environment variables
 const PORT = process.env.PORT || 5001;
+const FRONTEND_URL = process.env.FRONTEND_URL || 'http://127.0.0.1:5500';
+const WHATSAPP_NUMBER = process.env.WHATSAPP_NUMBER || '233540513045';
+
+console.log('📱 WhatsApp Number:', WHATSAPP_NUMBER);
 
 // Start server with port conflict handling
 const server = app.listen(PORT, () => {

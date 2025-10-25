@@ -11,10 +11,9 @@
     </style>
 </head>
 <body class="bg-gray-100">
-    <!-- Sidebar -->
     <div class="flex h-screen">
         <!-- Sidebar -->
-        <aside id="sidebar" class="bg-gray-800 text-white w-64 flex-shrink-0 hidden md:block">
+        <aside class="bg-gray-800 text-white w-64 flex-shrink-0 hidden md:block">
             <div class="p-6">
                 <h1 class="text-2xl font-bold text-pink-500">Marty's Admin</h1>
             </div>
@@ -81,94 +80,142 @@
                 <div class="flex items-center justify-between px-6 py-4">
                     <div>
                         <h2 class="text-2xl font-bold text-gray-800">Dashboard</h2>
-                        <p class="text-gray-600">Welcome back, <span id="admin-name">Admin</span>!</p>
+                        <p class="text-gray-600">Welcome back! Here's what's happening</p>
                     </div>
-                    <a href="../index.html" target="_blank" class="px-4 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700 transition-colors">
-                        View Website
+                    <a href="../index.html" target="_blank" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors">
+                        Preview Website
                     </a>
                 </div>
             </header>
 
-            <!-- Dashboard Content -->
+            <!-- Stats Cards -->
             <main class="p-6">
-                <!-- Stats Cards -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                    <div class="bg-white p-6 rounded-xl shadow-sm">
+                    <!-- Total Bookings -->
+                    <div class="bg-white rounded-xl shadow-sm p-6">
                         <div class="flex items-center justify-between">
                             <div>
-                                <p class="text-gray-600 text-sm">Total Bookings</p>
-                                <h3 class="text-3xl font-bold text-gray-800 mt-1" id="total-bookings">0</h3>
+                                <p class="text-gray-500 text-sm">Total Bookings</p>
+                                <p id="total-bookings" class="text-3xl font-bold text-gray-800">0</p>
                             </div>
-                            <div class="bg-blue-100 p-3 rounded-full">
-                                <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                                <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                                 </svg>
                             </div>
                         </div>
                     </div>
 
-                    <div class="bg-white p-6 rounded-xl shadow-sm">
+                    <!-- Pending Bookings -->
+                    <div class="bg-white rounded-xl shadow-sm p-6">
                         <div class="flex items-center justify-between">
                             <div>
-                                <p class="text-gray-600 text-sm">Gallery Images</p>
-                                <h3 class="text-3xl font-bold text-gray-800 mt-1" id="total-gallery">0</h3>
+                                <p class="text-gray-500 text-sm">Pending</p>
+                                <p id="pending-bookings" class="text-3xl font-bold text-yellow-600">0</p>
                             </div>
-                            <div class="bg-pink-100 p-3 rounded-full">
-                                <svg class="w-8 h-8 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                </svg>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="bg-white p-6 rounded-xl shadow-sm">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-gray-600 text-sm">Testimonials</p>
-                                <h3 class="text-3xl font-bold text-gray-800 mt-1" id="total-testimonials">0</h3>
-                            </div>
-                            <div class="bg-green-100 p-3 rounded-full">
-                                <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"></path>
-                                </svg>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="bg-white p-6 rounded-xl shadow-sm">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-gray-600 text-sm">Pending Bookings</p>
-                                <h3 class="text-3xl font-bold text-gray-800 mt-1" id="pending-bookings">0</h3>
-                            </div>
-                            <div class="bg-yellow-100 p-3 rounded-full">
-                                <svg class="w-8 h-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center">
+                                <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Confirmed Bookings -->
+                    <div class="bg-white rounded-xl shadow-sm p-6">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-500 text-sm">Confirmed</p>
+                                <p id="confirmed-bookings" class="text-3xl font-bold text-green-600">0</p>
+                            </div>
+                            <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                                <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Completed Bookings -->
+                    <div class="bg-white rounded-xl shadow-sm p-6">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-500 text-sm">Completed</p>
+                                <p id="completed-bookings" class="text-3xl font-bold text-purple-600">0</p>
+                            </div>
+                            <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
+                                <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                                 </svg>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Recent Bookings -->
+                <!-- Quick Access Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                    <!-- Gallery Card -->
+                    <a href="gallery.html" class="bg-white rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-bold text-gray-800">Gallery</h3>
+                            <div class="w-10 h-10 bg-pink-100 rounded-full flex items-center justify-center">
+                                <svg class="w-5 h-5 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 text-sm">Manage your portfolio images</p>
+                        <div class="mt-4 text-pink-600 text-sm font-medium">Manage Gallery →</div>
+                    </a>
+
+                    <!-- Testimonials Card -->
+                    <a href="testimonials.html" class="bg-white rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-bold text-gray-800">Testimonials</h3>
+                            <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                                <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 text-sm">Review client feedback</p>
+                        <div class="mt-4 text-blue-600 text-sm font-medium">View Reviews →</div>
+                    </a>
+
+                    <!-- Services Card -->
+                    <a href="services.html" class="bg-white rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-bold text-gray-800">Services</h3>
+                            <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                                <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 text-sm">Update service offerings</p>
+                        <div class="mt-4 text-green-600 text-sm font-medium">Manage Services →</div>
+                    </a>
+                </div>
+
+                <!-- Recent Bookings Table -->
                 <div class="bg-white rounded-xl shadow-sm p-6">
-                    <h3 class="text-xl font-bold text-gray-800 mb-4">Recent Bookings</h3>
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-bold text-gray-800">Recent Bookings</h3>
+                        <a href="bookings.html" class="text-pink-600 text-sm font-medium hover:text-pink-700">View All →</a>
+                    </div>
                     <div class="overflow-x-auto">
                         <table class="w-full">
-                            <thead>
-                                <tr class="border-b">
-                                    <th class="text-left py-3 px-4 text-gray-600 font-medium">Name</th>
-                                    <th class="text-left py-3 px-4 text-gray-600 font-medium">Service</th>
-                                    <th class="text-left py-3 px-4 text-gray-600 font-medium">Date</th>
-                                    <th class="text-left py-3 px-4 text-gray-600 font-medium">Status</th>
-                                    <th class="text-left py-3 px-4 text-gray-600 font-medium">Action</th>
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500">Name</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500">Service</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500">Date</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500">Status</th>
                                 </tr>
                             </thead>
-                            <tbody id="recent-bookings">
+                            <tbody id="recent-bookings" class="divide-y divide-gray-200">
                                 <tr>
-                                    <td colspan="5" class="text-center py-8 text-gray-500">
-                                        Loading bookings...
-                                    </td>
+                                    <td colspan="4" class="px-4 py-8 text-center text-gray-500">Loading...</td>
                                 </tr>
                             </tbody>
                         </table>

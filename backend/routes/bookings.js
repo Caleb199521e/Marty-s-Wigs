@@ -9,11 +9,11 @@ router.post('/', async (req, res) => {
     const booking = new Booking(req.body);
     await booking.save();
     
-    // TODO: Send confirmation email/SMS
-    
-    res.status(201).json({ 
-      message: 'Booking request submitted successfully',
-      booking 
+    // Return success with booking data
+    res.status(201).json({
+      message: 'Booking request received successfully',
+      booking: booking,
+      whatsappNumber: process.env.WHATSAPP_NUMBER || null
     });
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -23,18 +23,7 @@ router.post('/', async (req, res) => {
 // Get all bookings (admin only)
 router.get('/', authMiddleware, async (req, res) => {
   try {
-    const { status, date } = req.query;
-    const filter = {};
-    
-    if (status) filter.status = status;
-    if (date) {
-      const startDate = new Date(date);
-      const endDate = new Date(date);
-      endDate.setDate(endDate.getDate() + 1);
-      filter.date = { $gte: startDate, $lt: endDate };
-    }
-    
-    const bookings = await Booking.find(filter).sort({ date: 1, createdAt: -1 });
+    const bookings = await Booking.find().sort({ createdAt: -1 });
     res.json(bookings);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -42,16 +31,42 @@ router.get('/', authMiddleware, async (req, res) => {
 });
 
 // Update booking status (admin only)
-router.patch('/:id', authMiddleware, async (req, res) => {
+router.patch('/:id/status', authMiddleware, async (req, res) => {
   try {
+    const { status } = req.body;
+    
+    if (!['pending', 'confirmed', 'completed', 'cancelled'].includes(status)) {
+      return res.status(400).json({ error: 'Invalid status' });
+    }
+    
     const booking = await Booking.findByIdAndUpdate(
       req.params.id,
-      req.body,
+      { status },
       { new: true }
     );
+    
+    if (!booking) {
+      return res.status(404).json({ error: 'Booking not found' });
+    }
+    
     res.json(booking);
   } catch (error) {
     res.status(400).json({ error: error.message });
+  }
+});
+
+// Delete booking (admin only)
+router.delete('/:id', authMiddleware, async (req, res) => {
+  try {
+    const booking = await Booking.findByIdAndDelete(req.params.id);
+    
+    if (!booking) {
+      return res.status(404).json({ error: 'Booking not found' });
+    }
+    
+    res.json({ message: 'Booking deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 });
 

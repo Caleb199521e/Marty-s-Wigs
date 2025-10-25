@@ -1,72 +1,87 @@
+// Load dashboard stats
 async function loadDashboardStats() {
     try {
-        // Load all stats
-        const [bookings, gallery, testimonials] = await Promise.all([
-            apiRequest('/bookings'),
-            apiRequest('/gallery'),
-            apiRequest('/testimonials')
-        ]);
+        const bookings = await apiRequest('/bookings');
         
-        // Update stats
-        document.getElementById('total-bookings').textContent = bookings.length;
-        document.getElementById('total-gallery').textContent = gallery.length;
-        document.getElementById('total-testimonials').textContent = testimonials.length;
+        // Calculate stats
+        const total = bookings.length;
+        const pending = bookings.filter(b => b.status === 'pending' || !b.status).length;
+        const confirmed = bookings.filter(b => b.status === 'confirmed').length;
+        const completed = bookings.filter(b => b.status === 'completed').length;
         
-        // Count pending bookings
-        const pending = bookings.filter(b => b.status === 'pending').length;
+        // Update stat cards
+        document.getElementById('total-bookings').textContent = total;
         document.getElementById('pending-bookings').textContent = pending;
+        document.getElementById('confirmed-bookings').textContent = confirmed;
+        document.getElementById('completed-bookings').textContent = completed;
         
         // Load recent bookings
         loadRecentBookings(bookings);
         
     } catch (error) {
         console.error('Failed to load dashboard stats:', error);
-        showToast('Failed to load dashboard data', 'error');
     }
 }
 
+// Load recent bookings
 function loadRecentBookings(bookings) {
-    const tbody = document.getElementById('recent-bookings');
+    const tableBody = document.getElementById('recent-bookings');
     
-    if (bookings.length === 0) {
-        tbody.innerHTML = `
+    if (!bookings || bookings.length === 0) {
+        tableBody.innerHTML = `
             <tr>
-                <td colspan="5" class="text-center py-8 text-gray-500">
-                    No bookings yet
-                </td>
+                <td colspan="4" class="px-4 py-8 text-center text-gray-500">No bookings yet</td>
             </tr>
         `;
         return;
     }
     
-    // Show latest 5 bookings
-    const recent = bookings.slice(0, 5);
+    // Sort by date and get latest 5
+    const recent = bookings.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0, 5);
     
-    tbody.innerHTML = recent.map(booking => `
-        <tr class="border-b hover:bg-gray-50">
-            <td class="py-3 px-4">${booking.name}</td>
-            <td class="py-3 px-4">${booking.service}</td>
-            <td class="py-3 px-4">${new Date(booking.date).toLocaleDateString()}</td>
-            <td class="py-3 px-4">
-                <span class="px-3 py-1 rounded-full text-xs font-medium ${
-                    booking.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                    booking.status === 'confirmed' ? 'bg-green-100 text-green-800' :
-                    booking.status === 'completed' ? 'bg-blue-100 text-blue-800' :
-                    'bg-red-100 text-red-800'
-                }">
-                    ${booking.status}
-                </span>
-            </td>
-            <td class="py-3 px-4">
-                <a href="bookings.html?id=${booking._id}" class="text-pink-600 hover:text-pink-700">
-                    View
-                </a>
-            </td>
-        </tr>
-    `).join('');
+    tableBody.innerHTML = recent.map(booking => {
+        const statusColor = getStatusColor(booking.status);
+        return `
+            <tr>
+                <td class="px-4 py-3 text-sm text-gray-900">${booking.name}</td>
+                <td class="px-4 py-3 text-sm text-gray-600">${formatService(booking.service)}</td>
+                <td class="px-4 py-3 text-sm text-gray-600">${new Date(booking.date).toLocaleDateString()}</td>
+                <td class="px-4 py-3">
+                    <span class="px-2 py-1 text-xs rounded-full ${statusColor}">
+                        ${booking.status || 'pending'}
+                    </span>
+                </td>
+            </tr>
+        `;
+    }).join('');
 }
 
-// Load data on page load
+// Helper functions
+function formatService(service) {
+    const serviceNames = {
+        'wig-styling': 'Wig Styling',
+        'wig-coloring': 'Wig Coloring',
+        'frontal-installation': 'Frontal Installation',
+        'hair-treatment': 'Hair Treatment',
+        'standard-makeup': 'Standard Makeup',
+        'evening-makeup': 'Evening Makeup',
+        'bridal-makeup': 'Bridal Makeup',
+        'bridal-package': 'Bridal Package'
+    };
+    return serviceNames[service] || service;
+}
+
+function getStatusColor(status) {
+    const colors = {
+        'pending': 'bg-yellow-100 text-yellow-800',
+        'confirmed': 'bg-green-100 text-green-800',
+        'completed': 'bg-purple-100 text-purple-800',
+        'cancelled': 'bg-red-100 text-red-800'
+    };
+    return colors[status] || colors['pending'];
+}
+
+// Load on page ready
 document.addEventListener('DOMContentLoaded', () => {
     loadDashboardStats();
 });
