@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Testimonials Management - Marty's Wigs Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Poppins', sans-serif; }
+        .star-rating {
+            display: inline-flex;
+            gap: 4px;
+        }
+        .star {
+            cursor: pointer;
+            color: #d1d5db;
+            font-size: 24px;
+            transition: color 0.2s;
+        }
+        .star.active {
+            color: #fbbf24;
+        }
+        .star:hover,
+        .star:hover ~ .star {
+            color: #fbbf24;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="flex h-screen">
+        <!-- Sidebar -->
+        <aside class="bg-gray-800 text-white w-64 flex-shrink-0 hidden md:block">
+            <div class="p-6">
+                <h1 class="text-2xl font-bold text-pink-500">Marty's Admin</h1>
+            </div>
+            
+            <nav class="mt-6">
+                <a href="dashboard.html" class="flex items-center px-6 py-3 hover:bg-gray-700 transition-colors">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                    </svg>
+                    Dashboard
+                </a>
+                
+                <a href="gallery.html" class="flex items-center px-6 py-3 hover:bg-gray-700 transition-colors">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                    </svg>
+                    Gallery
+                </a>
+                
+                <a href="bookings.html" class="flex items-center px-6 py-3 hover:bg-gray-700 transition-colors">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                    </svg>
+                    Bookings
+                </a>
+                
+                <a href="services.html" class="flex items-center px-6 py-3 hover:bg-gray-700 transition-colors">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                    </svg>
+                    Services
+                </a>
+                
+                <a href="testimonials.html" class="flex items-center px-6 py-3 bg-gray-900 border-l-4 border-pink-500">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"></path>
+                    </svg>
+                    Testimonials
+                </a>
+                
+                <a href="settings.html" class="flex items-center px-6 py-3 hover:bg-gray-700 transition-colors">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    </svg>
+                    Settings
+                </a>
+            </nav>
+
+            <div class="absolute bottom-0 w-64 p-6">
+                <button id="logout-btn" class="flex items-center text-gray-400 hover:text-white transition-colors">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                    </svg>
+                    Logout
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="flex-1 overflow-x-hidden overflow-y-auto">
+            <!-- Header -->
+            <header class="bg-white shadow-sm">
+                <div class="flex items-center justify-between px-6 py-4">
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-800">Testimonials Management</h2>
+                        <p class="text-gray-600">Manage and approve client reviews</p>
+                    </div>
+                    <button id="add-testimonial-btn" class="px-6 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700 transition-colors flex items-center">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                        </svg>
+                        Add Testimonial
+                    </button>
+                </div>
+            </header>
+
+            <!-- Filter Tabs -->
+            <div class="bg-white border-b px-6 py-3">
+                <div class="flex space-x-4">
+                    <button data-filter="all" class="px-4 py-2 bg-pink-600 text-white rounded-lg font-medium filter-btn">
+                        All (<span id="count-all">0</span>)
+                    </button>
+                    <button data-filter="approved" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg font-medium filter-btn">
+                        Approved (<span id="count-approved">0</span>)
+                    </button>
+                    <button data-filter="pending" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg font-medium filter-btn">
+                        Pending (<span id="count-pending">0</span>)
+                    </button>
+                    <button data-filter="featured" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg font-medium filter-btn">
+                        Featured (<span id="count-featured">0</span>)
+                    </button>
+                </div>
+            </div>
+
+            <!-- Testimonials Grid -->
+            <main class="p-6">
+                <div id="testimonials-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Loading state -->
+                    <div class="col-span-full text-center py-12">
+                        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-600 mx-auto"></div>
+                        <p class="text-gray-600 mt-4">Loading testimonials...</p>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Add/Edit Testimonial Modal -->
+    <div id="testimonial-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-2xl font-bold text-gray-800" id="modal-title">Add Testimonial</h3>
+                    <button id="close-modal" class="text-gray-400 hover:text-gray-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+
+                <form id="testimonial-form" class="space-y-6">
+                    <input type="hidden" id="testimonial-id">
+                    
+                    <!-- Client Name -->
+                    <div>
+                        <label for="client-name" class="block text-gray-700 font-medium mb-2">Client Name *</label>
+                        <input 
+                            type="text" 
+                            id="client-name" 
+                            required
+                            placeholder="e.g., Sarah J."
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500"
+                        >
+                    </div>
+
+                    <!-- Client Image -->
+                    <div>
+                        <label class="block text-gray-700 font-medium mb-2">Client Photo (Optional)</label>
+                        <input 
+                            type="file" 
+                            id="client-image" 
+                            accept="image/*"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500"
+                        >
+                        <p class="text-sm text-gray-500 mt-1">Upload client's photo with permission</p>
+                    </div>
+
+                    <!-- Rating -->
+                    <div>
+                        <label class="block text-gray-700 font-medium mb-2">Rating *</label>
+                        <div class="star-rating" id="star-rating">
+                            <span class="star" data-rating="1">★</span>
+                            <span class="star" data-rating="2">★</span>
+                            <span class="star" data-rating="3">★</span>
+                            <span class="star" data-rating="4">★</span>
+                            <span class="star" data-rating="5">★</span>
+                        </div>
+                        <input type="hidden" id="rating" value="5" required>
+                    </div>
+
+                    <!-- Comment -->
+                    <div>
+                        <label for="comment" class="block text-gray-700 font-medium mb-2">Review/Comment *</label>
+                        <textarea 
+                            id="comment" 
+                            rows="4"
+                            required
+                            placeholder="Write the client's testimonial..."
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500"
+                        ></textarea>
+                    </div>
+
+                    <!-- Service -->
+                    <div>
+                        <label for="service" class="block text-gray-700 font-medium mb-2">Service Received</label>
+                        <input 
+                            type="text" 
+                            id="service" 
+                            placeholder="e.g., Bridal Makeup"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500"
+                        >
+                    </div>
+
+                    <!-- Checkboxes -->
+                    <div class="space-y-3">
+                        <div class="flex items-center">
+                            <input type="checkbox" id="approved" checked class="w-4 h-4 text-pink-600 border-gray-300 rounded focus:ring-pink-500">
+                            <label for="approved" class="ml-2 text-gray-700">Approved (visible on website)</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input type="checkbox" id="featured" class="w-4 h-4 text-pink-600 border-gray-300 rounded focus:ring-pink-500">
+                            <label for="featured" class="ml-2 text-gray-700">Featured (show prominently)</label>
+                        </div>
+                    </div>
+
+                    <!-- Error Message -->
+                    <div id="testimonial-error" class="hidden p-4 bg-red-100 text-red-700 rounded-lg"></div>
+
+                    <!-- Buttons -->
+                    <div class="flex gap-4">
+                        <button 
+                            type="submit" 
+                            id="submit-testimonial"
+                            class="flex-1 bg-pink-600 text-white py-3 rounded-lg font-medium hover:bg-pink-700 transition-colors"
+                        >
+                            Save Testimonial
+                        </button>
+                        <button 
+                            type="button" 
+                            id="cancel-testimonial"
+                            class="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors"
+                        >
+                            Cancel
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/admin.js"></script>
+    <script src="js/testimonials.js"></script>
+</body>
+</html>

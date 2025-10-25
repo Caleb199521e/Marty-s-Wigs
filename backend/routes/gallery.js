@@ -9,49 +9,85 @@ router.get('/', async (req, res) => {
   try {
     const { category } = req.query;
     const filter = category && category !== 'all' ? { category } : {};
-    
-    const items = await Gallery.find(filter).sort({ order: 1, createdAt: -1 });
+    const items = await Gallery.find(filter).sort({ createdAt: -1 });
     res.json(items);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
 
-// Get featured gallery items
+// Get featured gallery items (public)
 router.get('/featured', async (req, res) => {
   try {
-    const items = await Gallery.find({ featured: true }).sort({ order: 1 }).limit(4);
+    const items = await Gallery.find({ featured: true })
+      .sort({ createdAt: -1 })
+      .limit(4);
     res.json(items);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
 
-// Create gallery item (admin only)
+// Upload image (admin only)
 router.post('/', authMiddleware, upload.single('image'), async (req, res) => {
   try {
-    const galleryData = {
-      ...req.body,
-      imageUrl: req.file ? req.file.path : req.body.imageUrl
-    };
+    console.log('Upload request received');
+    console.log('File:', req.file);
+    console.log('Body:', req.body);
+
+    if (!req.file) {
+      return res.status(400).json({ error: 'No image file provided' });
+    }
+
+    const imageUrl = req.file.path || req.file.location || `/uploads/${req.file.filename}`;
+
+    const galleryItem = new Gallery({
+      title: req.body.title || 'Untitled',
+      imageUrl: imageUrl,
+      category: req.body.category || 'wigs',
+      featured: req.body.featured === 'true' || req.body.featured === true
+    });
+
+    await galleryItem.save();
+    console.log('Gallery item saved:', galleryItem);
+
+    res.status(201).json(galleryItem);
+  } catch (error) {
+    console.error('Upload error:', error);
+    res.status(400).json({ error: error.message });
+  }
+});
+
+// Toggle featured status (admin only)
+router.patch('/:id/featured', authMiddleware, async (req, res) => {
+  try {
+    const item = await Gallery.findById(req.params.id);
+    if (!item) {
+      return res.status(404).json({ error: 'Gallery item not found' });
+    }
     
-    const item = new Gallery(galleryData);
+    item.featured = !item.featured;
     await item.save();
-    res.status(201).json(item);
+    
+    res.json(item);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 });
 
 // Update gallery item (admin only)
-router.put('/:id', authMiddleware, upload.single('image'), async (req, res) => {
+router.put('/:id', authMiddleware, async (req, res) => {
   try {
-    const updateData = { ...req.body };
-    if (req.file) {
-      updateData.imageUrl = req.file.path;
+    const item = await Gallery.findByIdAndUpdate(
+      req.params.id,
+      { title: req.body.title, category: req.body.category },
+      { new: true }
+    );
+    
+    if (!item) {
+      return res.status(404).json({ error: 'Gallery item not found' });
     }
     
-    const item = await Gallery.findByIdAndUpdate(req.params.id, updateData, { new: true });
     res.json(item);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -61,10 +97,15 @@ router.put('/:id', authMiddleware, upload.single('image'), async (req, res) => {
 // Delete gallery item (admin only)
 router.delete('/:id', authMiddleware, async (req, res) => {
   try {
-    await Gallery.findByIdAndDelete(req.params.id);
-    res.json({ message: 'Gallery item deleted' });
+    const item = await Gallery.findByIdAndDelete(req.params.id);
+    
+    if (!item) {
+      return res.status(404).json({ error: 'Gallery item not found' });
+    }
+    
+    res.json({ message: 'Gallery item deleted successfully' });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(500).json({ error: error.message });
   }
 });
 

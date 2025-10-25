@@ -1,16 +1,26 @@
 const mongoose = require('mongoose');
 
 const settingsSchema = new mongoose.Schema({
+  hero: {
+    title: String,
+    subtitle: String,
+    image: String
+  },
   contact: {
     phone: String,
+    whatsapp: String,
     email: String,
-    address: String,
-    whatsapp: String
+    address: String
   },
   social: {
     instagram: String,
     tiktok: String,
     facebook: String
+  },
+  about: {
+    title: String,
+    description: String,
+    image: String  // Add about image field
   },
   businessHours: {
     monday: String,
@@ -20,19 +30,7 @@ const settingsSchema = new mongoose.Schema({
     friday: String,
     saturday: String,
     sunday: String
-  },
-  hero: {
-    title: String,
-    subtitle: String,
-    imageUrl: String
-  },
-  about: {
-    title: String,
-    description: String,
-    imageUrl: String
   }
-}, {
-  timestamps: true
-});
+}, { timestamps: true });
 
 module.exports = mongoose.model('Settings', settingsSchema);

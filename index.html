@@ -107,12 +107,41 @@
         input.error, select.error, textarea.error {
             border-color: #dc2626;
         }
+        
+        /* Active navigation link */
+        .nav-link {
+            position: relative;
+            transition: color 0.3s;
+        }
+        .nav-link.active {
+            color: #db2777; /* pink-600 */
+            font-weight: 500;
+        }
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: #db2777;
+            border-radius: 2px;
+        }
+        
+        /* Mobile menu active link */
+        .mobile-nav-link.active {
+            color: #db2777;
+            font-weight: 500;
+            background-color: #fce7f3; /* pink-100 */
+            border-left: 3px solid #db2777;
+            padding-left: 1rem;
+        }
     </style>
     
     <!-- Add API configuration -->
     <script>
         // API Configuration
-        const API_BASE_URL = 'http://localhost:5000/api';
+        const API_BASE_URL = 'http://localhost:5001/api';
     </script>
 </head>
 <body class="font-body text-gray-700 bg-brand-beige">
@@ -134,12 +163,12 @@
             
             <!-- Desktop Menu -->
             <div class="hidden md:flex space-x-8">
-                <a href="#home" class="text-gray-700 hover:text-pink-600 transition-colors">Home</a>
-                <a href="#about" class="text-gray-700 hover:text-pink-600 transition-colors">About</a>
-                <a href="#services" class="text-gray-700 hover:text-pink-600 transition-colors">Services</a>
-                <a href="#gallery" class="text-gray-700 hover:text-pink-600 transition-colors">Gallery</a>
-                <a href="#booking" class="text-gray-700 hover:text-pink-600 transition-colors">Booking</a>
-                <a href="#contact" class="text-gray-700 hover:text-pink-600 transition-colors">Contact</a>
+                <a href="#home" class="nav-link text-gray-700 hover:text-pink-600 transition-colors">Home</a>
+                <a href="#about" class="nav-link text-gray-700 hover:text-pink-600 transition-colors">About</a>
+                <a href="#services" class="nav-link text-gray-700 hover:text-pink-600 transition-colors">Services</a>
+                <a href="#gallery" class="nav-link text-gray-700 hover:text-pink-600 transition-colors">Gallery</a>
+                <a href="#booking" class="nav-link text-gray-700 hover:text-pink-600 transition-colors">Booking</a>
+                <a href="#contact" class="nav-link text-gray-700 hover:text-pink-600 transition-colors">Contact</a>
             </div>
             
             <!-- Mobile Menu Button -->
@@ -153,12 +182,12 @@
         <!-- Mobile Menu -->
         <div id="mobile-menu" class="md:hidden bg-white py-4 px-4 shadow-lg hidden">
             <div class="flex flex-col space-y-4">
-                <a href="#home" class="text-gray-700 hover:text-pink-600 transition-colors py-2">Home</a>
-                <a href="#about" class="text-gray-700 hover:text-pink-600 transition-colors py-2">About</a>
-                <a href="#services" class="text-gray-700 hover:text-pink-600 transition-colors py-2">Services</a>
-                <a href="#gallery" class="text-gray-700 hover:text-pink-600 transition-colors py-2">Gallery</a>
-                <a href="#booking" class="text-gray-700 hover:text-pink-600 transition-colors py-2">Booking</a>
-                <a href="#contact" class="text-gray-700 hover:text-pink-600 transition-colors py-2">Contact</a>
+                <a href="#home" class="mobile-nav-link text-gray-700 hover:text-pink-600 transition-colors py-2">Home</a>
+                <a href="#about" class="mobile-nav-link text-gray-700 hover:text-pink-600 transition-colors py-2">About</a>
+                <a href="#services" class="mobile-nav-link text-gray-700 hover:text-pink-600 transition-colors py-2">Services</a>
+                <a href="#gallery" class="mobile-nav-link text-gray-700 hover:text-pink-600 transition-colors py-2">Gallery</a>
+                <a href="#booking" class="mobile-nav-link text-gray-700 hover:text-pink-600 transition-colors py-2">Booking</a>
+                <a href="#contact" class="mobile-nav-link text-gray-700 hover:text-pink-600 transition-colors py-2">Contact</a>
             </div>
         </div>
     </nav>
@@ -170,15 +199,17 @@
             <div class="container mx-auto px-4">
                 <div class="flex flex-col md:flex-row items-center">
                     <div class="md:w-1/2 mb-10 md:mb-0 fade-in">
-                        <h1 class="font-heading text-4xl md:text-5xl lg:text-6xl text-gray-800 mb-6">Redefining Beauty with Confidence.</h1>
-                        <p class="text-lg text-gray-600 mb-8">Experience premium wig styling and professional makeup services tailored to enhance your natural beauty.</p>
+                        <h1 id="hero-title" class="font-heading text-4xl md:text-5xl lg:text-6xl text-gray-800 mb-6">Redefining Beauty with Confidence.</h1>
+                        <p id="hero-subtitle" class="text-lg text-gray-600 mb-8">Experience premium wig styling and professional makeup services tailored to enhance your natural beauty.</p>
                         <a href="#booking" class="inline-block bg-pink-600 text-white px-8 py-3 rounded-full font-medium hover:bg-pink-700 transition-colors shadow-lg">Book Appointment</a>
                     </div>
                     <div class="md:w-1/2 fade-in">
                         <div class="bg-white p-2 rounded-xl shadow-xl">
-                            <!-- Hero image placeholder - replace with actual image -->
-                            <div class="bg-gray-200 h-64 md:h-80 rounded-lg flex items-center justify-center">
-                                <span class="text-gray-500">Hero Image</span>
+                            <div id="hero-image-container" class="bg-gray-200 h-64 md:h-80 rounded-lg overflow-hidden">
+                                <img id="hero-image" src="" alt="Hero" class="w-full h-full object-cover hidden">
+                                <div id="hero-placeholder" class="w-full h-full flex items-center justify-center">
+                                    <span class="text-gray-500">Hero Image</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -376,7 +407,7 @@
                                 <h4 class="font-medium mb-2">Installation Options:</h4>
                                 <ul class="text-gray-600">
                                     <li>360 Frontal Installation: $150 - $250</li>
-                                    <li>Full Frontal Installation: $120 - $200</li>
+                                   
                                     <li>Closure Installation: $80 - $150</li>
                                 </ul>
                             </div>
@@ -638,7 +669,7 @@
                                     </svg>
                                     <div>
                                         <h4 class="font-medium">Studio Location</h4>
-                                        <p class="text-gray-600">[Address will be added here]</p>
+                                        <p class="text-gray-600" data-contact="address">[Address will be added here]</p>
                                     </div>
                                 </div>
                                 <div class="flex items-start">
@@ -647,7 +678,7 @@
                                     </svg>
                                     <div>
                                         <h4 class="font-medium">Phone</h4>
-                                        <p class="text-gray-600">[Phone number will be added here]</p>
+                                        <p class="text-gray-600" data-contact="phone">[Phone number will be added here]</p>
                                     </div>
                                 </div>
                                 <div class="flex items-start">
@@ -656,7 +687,7 @@
                                     </svg>
                                     <div>
                                         <h4 class="font-medium">Email</h4>
-                                        <p class="text-gray-600">[Email will be added here]</p>
+                                        <p class="text-gray-600" data-contact="email">[Email will be added here]</p>
                                     </div>
                                 </div>
                             </div>
@@ -718,6 +749,9 @@
             <div class="border-t border-gray-700 mt-6 pt-6 text-center text-gray-400">
                 <p>&copy; 2023 Marty's Wigs & Makeover. All rights reserved.</p>
                 <p class="mt-2">Payments made are non-refundable.</p>
+                <p class="mt-4">
+                    <a href="admin/login.html" class="text-gray-500 hover:text-gray-300 text-sm">Admin Login</a>
+                </p>
             </div>
         </div>
     </footer>
@@ -730,130 +764,52 @@
 
     <!-- JavaScript -->
     <script>
-        // Wait for DOM to load
-        document.addEventListener('DOMContentLoaded', function() {
-            // Hide loading spinner
+        // IMMEDIATELY hide loading spinner before anything else
+        window.addEventListener('DOMContentLoaded', function() {
             document.getElementById('loading').style.display = 'none';
-            
-            // Mobile menu toggle
-            const mobileMenuButton = document.getElementById('mobile-menu-button');
-            const mobileMenu = document.getElementById('mobile-menu');
-            
-            mobileMenuButton.addEventListener('click', function() {
-                mobileMenu.classList.toggle('hidden');
-            });
-            
-            // Close mobile menu when clicking on a link
-            const mobileMenuLinks = document.querySelectorAll('#mobile-menu a');
-            mobileMenuLinks.forEach(link => {
-                link.addEventListener('click', function() {
-                    mobileMenu.classList.add('hidden');
-                });
-            });
-            
-            // Service tabs
-            const wigTab = document.getElementById('wig-tab');
-            const makeupTab = document.getElementById('makeup-tab');
-            const wigServices = document.getElementById('wig-services');
-            const makeupServices = document.getElementById('makeup-services');
-            
-            wigTab.addEventListener('click', function() {
-                wigTab.classList.remove('bg-gray-200', 'text-gray-700');
-                wigTab.classList.add('bg-pink-600', 'text-white');
-                makeupTab.classList.remove('bg-pink-600', 'text-white');
-                makeupTab.classList.add('bg-gray-200', 'text-gray-700');
-                wigServices.classList.remove('hidden');
-                makeupServices.classList.add('hidden');
-            });
-            
-            makeupTab.addEventListener('click', function() {
-                makeupTab.classList.remove('bg-gray-200', 'text-gray-700');
-                makeupTab.classList.add('bg-pink-600', 'text-white');
-                wigTab.classList.remove('bg-pink-600', 'text-white');
-                wigTab.classList.add('bg-gray-200', 'text-gray-700');
-                makeupServices.classList.remove('hidden');
-                wigServices.classList.add('hidden');
-            });
-            
-            // Gallery filter
-            const filterButtons = document.querySelectorAll('[data-filter]');
-            const galleryItems = document.querySelectorAll('.gallery-item');
-            
-            filterButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const filter = this.getAttribute('data-filter');
-                    
-                    // Update active button
-                    filterButtons.forEach(btn => {
-                        btn.classList.remove('bg-pink-600', 'text-white');
-                        btn.classList.add('bg-gray-200', 'text-gray-700');
-                    });
-                    this.classList.remove('bg-gray-200', 'text-gray-700');
-                    this.classList.add('bg-pink-600', 'text-white');
-                    
-                    // Filter items
-                    galleryItems.forEach(item => {
-                        if (filter === 'all' || item.classList.contains(filter)) {
-                            item.style.display = 'block';
-                        } else {
-                            item.style.display = 'none';
-                        }
-                    });
-                });
-            });
-            
-            // Lightbox functionality
-            const lightbox = document.getElementById('lightbox');
-            const lightboxImage = document.getElementById('lightbox-image');
-            const closeLightbox = document.getElementById('close-lightbox');
-            const galleryImages = document.querySelectorAll('.gallery-image');
-            
-            galleryImages.forEach(image => {
-                image.addEventListener('click', function() {
-                    // In a real implementation, this would show the actual image
-                    lightboxImage.src = ''; // Set to actual image source
-                    lightboxImage.alt = 'Gallery Image';
-                    lightbox.classList.add('active');
-                });
-            });
-            
-            closeLightbox.addEventListener('click', function() {
-                lightbox.classList.remove('active');
-            });
-            
-            // Set minimum date to today
-            const dateInput = document.getElementById('date');
-            const today = new Date().toISOString().split('T')[0];
-            dateInput.setAttribute('min', today);
-            
-            // Form validation helper functions
-            function validateEmail(email) {
-                const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                return re.test(email);
-            }
-            
-            function validatePhone(phone) {
-                const re = /^[\d\s\+\-\(\)]+$/;
-                return phone.length >= 10 && re.test(phone);
-            }
-            
-            function showError(inputId, message) {
-                const input = document.getElementById(inputId);
-                const errorElement = document.getElementById(inputId + '-error');
+        });
+        
+        // If DOMContentLoaded already fired, hide it now
+        if (document.readyState === 'loading') {
+            // Document still loading
+        } else {
+            // DOM already loaded
+            document.getElementById('loading').style.display = 'none';
+        }
+
+        // Form validation helper functions
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+        
+        function validatePhone(phone) {
+            const re = /^[\d\s\+\-\(\)]+$/;
+            return phone.length >= 10 && re.test(phone);
+        }
+        
+        function showError(inputId, message) {
+            const input = document.getElementById(inputId);
+            const errorElement = document.getElementById(inputId + '-error');
+            if (input && errorElement) {
                 input.classList.add('error');
                 errorElement.textContent = message;
                 errorElement.classList.add('visible');
             }
-            
-            function clearError(inputId) {
-                const input = document.getElementById(inputId);
-                const errorElement = document.getElementById(inputId + '-error');
+        }
+        
+        function clearError(inputId) {
+            const input = document.getElementById(inputId);
+            const errorElement = document.getElementById(inputId + '-error');
+            if (input && errorElement) {
                 input.classList.remove('error');
                 errorElement.classList.remove('visible');
             }
-            
-            function showFormMessage(message, type = 'success') {
-                const messageEl = document.getElementById('form-message');
+        }
+        
+        function showFormMessage(message, type = 'success') {
+            const messageEl = document.getElementById('form-message');
+            if (messageEl) {
                 messageEl.textContent = message;
                 messageEl.className = type === 'success' 
                     ? 'p-4 rounded-lg bg-green-100 text-green-700' 
@@ -864,121 +820,233 @@
                     messageEl.classList.add('hidden');
                 }, 5000);
             }
+        }
+
+        // Wait for DOM to load
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Page loading started...');
+            
+            // Hide loading spinner immediately
+            const loadingEl = document.getElementById('loading');
+            if (loadingEl) {
+                loadingEl.style.display = 'none';
+                console.log('✅ Loading spinner hidden');
+            }
+            
+            // Mobile menu toggle
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            
+            if (mobileMenuButton && mobileMenu) {
+                mobileMenuButton.addEventListener('click', function() {
+                    mobileMenu.classList.toggle('hidden');
+                });
+            }
+            
+            // Close mobile menu when clicking on a link
+            const mobileMenuLinks = document.querySelectorAll('#mobile-menu a');
+            mobileMenuLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    if (mobileMenu) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                });
+            });
+            
+            // Service tabs
+            const wigTab = document.getElementById('wig-tab');
+            const makeupTab = document.getElementById('makeup-tab');
+            const wigServices = document.getElementById('wig-services');
+            const makeupServices = document.getElementById('makeup-services');
+            
+            if (wigTab && makeupTab && wigServices && makeupServices) {
+                wigTab.addEventListener('click', function() {
+                    wigTab.classList.remove('bg-gray-200', 'text-gray-700');
+                    wigTab.classList.add('bg-pink-600', 'text-white');
+                    makeupTab.classList.remove('bg-pink-600', 'text-white');
+                    makeupTab.classList.add('bg-gray-200', 'text-gray-700');
+                    wigServices.classList.remove('hidden');
+                    makeupServices.classList.add('hidden');
+                });
+                
+                makeupTab.addEventListener('click', function() {
+                    makeupTab.classList.remove('bg-gray-200', 'text-gray-700');
+                    makeupTab.classList.add('bg-pink-600', 'text-white');
+                    wigTab.classList.remove('bg-pink-600', 'text-white');
+                    wigTab.classList.add('bg-gray-200', 'text-gray-700');
+                    makeupServices.classList.remove('hidden');
+                    wigServices.classList.add('hidden');
+                });
+            }
+            
+            // Set minimum date to today
+            const dateInput = document.getElementById('date');
+            if (dateInput) {
+                const today = new Date().toISOString().split('T')[0];
+                dateInput.setAttribute('min', today);
+            }
             
             // Enhanced booking form validation
-            bookingForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                
-                // Clear previous errors
-                ['name', 'contact', 'email', 'service', 'date'].forEach(clearError);
-                
-                let isValid = true;
-                
-                // Validate name
-                const name = document.getElementById('name').value.trim();
-                if (name.length < 2) {
-                    showError('name', 'Please enter your full name');
-                    isValid = false;
-                }
-                
-                // Validate contact
-                const contact = document.getElementById('contact').value.trim();
-                if (!validatePhone(contact)) {
-                    showError('contact', 'Please enter a valid phone number');
-                    isValid = false;
-                }
-                
-                // Validate email (if provided)
-                const email = document.getElementById('email').value.trim();
-                if (email && !validateEmail(email)) {
-                    showError('email', 'Please enter a valid email address');
-                    isValid = false;
-                }
-                
-                // Validate service selection
-                const service = document.getElementById('service').value;
-                if (!service) {
-                    showError('service', 'Please select a service');
-                    isValid = false;
-                }
-                
-                // Validate date
-                const date = document.getElementById('date').value;
-                if (!date) {
-                    showError('date', 'Please select a date');
-                    isValid = false;
-                } else {
-                    const selectedDate = new Date(date);
-                    const today = new Date();
-                    today.setHours(0, 0, 0, 0);
+            const bookingForm = document.getElementById('booking-form');
+            if (bookingForm) {
+                bookingForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
                     
-                    if (selectedDate < today) {
-                        showError('date', 'Please select a future date');
+                    // Clear previous errors
+                    ['name', 'contact', 'email', 'service', 'date'].forEach(clearError);
+                    
+                    let isValid = true;
+                    
+                    // Validate name
+                    const name = document.getElementById('name');
+                    if (name && name.value.trim().length < 2) {
+                        showError('name', 'Please enter your full name');
                         isValid = false;
                     }
+                    
+                    // Validate contact
+                    const contact = document.getElementById('contact');
+                    if (contact && !validatePhone(contact.value.trim())) {
+                        showError('contact', 'Please enter a valid phone number');
+                        isValid = false;
+                    }
+                    
+                    // Validate email (if provided)
+                    const email = document.getElementById('email');
+                    if (email && email.value.trim() && !validateEmail(email.value.trim())) {
+                        showError('email', 'Please enter a valid email address');
+                        isValid = false;
+                    }
+                    
+                    // Validate service selection
+                    const service = document.getElementById('service');
+                    if (service && !service.value) {
+                        showError('service', 'Please select a service');
+                        isValid = false;
+                    }
+                    
+                    // Validate date
+                    const date = document.getElementById('date');
+                    if (date && !date.value) {
+                        showError('date', 'Please select a date');
+                        isValid = false;
+                    } else if (date && date.value) {
+                        const selectedDate = new Date(date.value);
+                        const today = new Date();
+                        today.setHours(0, 0, 0, 0);
+                        
+                        if (selectedDate < today) {
+                            showError('date', 'Please select a future date');
+                            isValid = false;
+                        }
+                    }
+                    
+                    if (!isValid) {
+                        return;
+                    }
+                    
+                    // Disable submit button
+                    const submitBtn = document.getElementById('submit-btn');
+                    if (submitBtn) {
+                        submitBtn.disabled = true;
+                        submitBtn.textContent = 'Sending...';
+                    }
+                    
+                    // Get form data
+                    const formData = new FormData(bookingForm);
+                    const bookingData = {
+                        name: formData.get('name'),
+                        contact: formData.get('contact'),
+                        email: formData.get('email'),
+                        service: formData.get('service'),
+                        date: formData.get('date'),
+                        notes: formData.get('notes')
+                    };
+                    
+                    // Simulate API call
+                    setTimeout(() => {
+                        console.log('Booking submitted:', bookingData);
+                        
+                        showFormMessage('Thank you for your booking request! We will contact you soon to confirm your appointment.', 'success');
+                        
+                        // Reset form
+                        bookingForm.reset();
+                        
+                        // Re-enable submit button
+                        if (submitBtn) {
+                            submitBtn.disabled = false;
+                            submitBtn.textContent = 'Send Booking Request';
+                        }
+                    }, 1000);
+                });
+                
+                // Real-time validation
+                const nameInput = document.getElementById('name');
+                if (nameInput) {
+                    nameInput.addEventListener('blur', function() {
+                        if (this.value.trim().length >= 2) {
+                            clearError('name');
+                        }
+                    });
                 }
                 
-                if (!isValid) {
-                    return;
+                const contactInput = document.getElementById('contact');
+                if (contactInput) {
+                    contactInput.addEventListener('blur', function() {
+                        if (validatePhone(this.value.trim())) {
+                            clearError('contact');
+                        }
+                    });
                 }
                 
-                // Disable submit button
-                const submitBtn = document.getElementById('submit-btn');
-                submitBtn.disabled = true;
-                submitBtn.textContent = 'Sending...';
-                
-                // Get form data
-                const formData = new FormData(bookingForm);
-                const bookingData = {
-                    name: formData.get('name'),
-                    contact: formData.get('contact'),
-                    email: formData.get('email'),
-                    service: formData.get('service'),
-                    date: formData.get('date'),
-                    notes: formData.get('notes')
-                };
-                
-                // TODO: Integrate with backend API or email service
-                // For now, create a WhatsApp message
-                const whatsappMessage = `New Booking Request:%0A%0AName: ${bookingData.name}%0APhone: ${bookingData.contact}%0AEmail: ${bookingData.email}%0AService: ${bookingData.service}%0ADate: ${bookingData.date}%0ANotes: ${bookingData.notes || 'None'}`;
-                
-                // Simulate API call
-                setTimeout(() => {
-                    console.log('Booking submitted:', bookingData);
-                    
-                    showFormMessage('Thank you for your booking request! We will contact you soon to confirm your appointment.', 'success');
-                    
-                    // Reset form
-                    bookingForm.reset();
-                    
-                    // Re-enable submit button
-                    submitBtn.disabled = false;
-                    submitBtn.textContent = 'Send Booking Request';
-                    
-                    // Optional: Redirect to WhatsApp
-                    // window.open(`https://wa.me/PHONE_NUMBER?text=${whatsappMessage}`, '_blank');
-                }, 1000);
-            });
+                const emailInput = document.getElementById('email');
+                if (emailInput) {
+                    emailInput.addEventListener('blur', function() {
+                        const email = this.value.trim();
+                        if (!email || validateEmail(email)) {
+                            clearError('email');
+                        }
+                    });
+                }
+            }
             
-            // Real-time validation
-            document.getElementById('name').addEventListener('blur', function() {
-                if (this.value.trim().length >= 2) {
-                    clearError('name');
-                }
-            });
+            // Active navigation indicator
+            const sections = document.querySelectorAll('main section[id]');
+            const navLinks = document.querySelectorAll('.nav-link');
+            const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
             
-            document.getElementById('contact').addEventListener('blur', function() {
-                if (validatePhone(this.value.trim())) {
-                    clearError('contact');
-                }
-            });
+            function updateActiveNav() {
+                let currentSection = '';
+                const scrollPosition = window.scrollY + 100;
+                
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.offsetHeight;
+                    
+                    if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+                        currentSection = section.getAttribute('id');
+                    }
+                });
+                
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    const href = link.getAttribute('href').substring(1);
+                    if (href === currentSection) {
+                        link.classList.add('active');
+                    }
+                });
+                
+                mobileNavLinks.forEach(link => {
+                    link.classList.remove('active');
+                    const href = link.getAttribute('href').substring(1);
+                    if (href === currentSection) {
+                        link.classList.add('active');
+                    }
+                });
+            }
             
-            document.getElementById('email').addEventListener('blur', function() {
-                const email = this.value.trim();
-                if (!email || validateEmail(email)) {
-                    clearError('email');
-                }
-            });
+            window.addEventListener('scroll', updateActiveNav);
+            updateActiveNav();
             
             // Fade-in animation on scroll
             const fadeElements = document.querySelectorAll('.fade-in');
@@ -994,20 +1062,20 @@
                 });
             };
             
-            // Check on load and scroll
             window.addEventListener('scroll', fadeInOnScroll);
-            fadeInOnScroll(); // Initial check
+            fadeInOnScroll();
             
             // Navbar background on scroll
             const navbar = document.getElementById('navbar');
-            
-            window.addEventListener('scroll', function() {
-                if (window.scrollY > 50) {
-                    navbar.classList.add('bg-white', 'shadow-md');
-                } else {
-                    navbar.classList.remove('bg-white', 'shadow-md');
-                }
-            });
+            if (navbar) {
+                window.addEventListener('scroll', function() {
+                    if (window.scrollY > 50) {
+                        navbar.classList.add('bg-white', 'shadow-md');
+                    } else {
+                        navbar.classList.remove('bg-white', 'shadow-md');
+                    }
+                });
+            }
             
             // Smooth scrolling for anchor links
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -1023,9 +1091,14 @@
                             top: targetElement.offsetTop - 80,
                             behavior: 'smooth'
                         });
+                        
+                        setTimeout(updateActiveNav, 100);
                     }
                 });
             });
+            
+            // Load all dynamic content
+            loadDynamicContent();
         });
         
         // API Helper Functions
@@ -1058,40 +1131,67 @@
         // Load Gallery from API
         async function loadGallery(category = 'all') {
             const galleryGrid = document.querySelector('#gallery .grid');
+            if (!galleryGrid) return;
+            
             const items = await fetchAPI(`/gallery${category !== 'all' ? '?category=' + category : ''}`);
             
             if (items && items.length > 0) {
                 galleryGrid.innerHTML = items.map(item => `
-                    <div class="gallery-item ${item.category} fade-in">
+                    <div class="gallery-item ${item.category} fade-in visible">
                         <div class="relative h-48 rounded-lg overflow-hidden cursor-pointer gallery-image" data-src="${item.imageUrl}">
                             <img src="${item.imageUrl}" alt="${item.title}" class="w-full h-full object-cover hover:scale-110 transition-transform duration-300">
                         </div>
                     </div>
                 `).join('');
                 
-                // Reinitialize gallery click events
                 initGalleryLightbox();
+            } else {
+                galleryGrid.innerHTML = `
+                    <div class="col-span-full text-center py-12">
+                        <p class="text-gray-500">No images available yet. Check back soon!</p>
+                    </div>
+                `;
             }
         }
         
         // Load Featured Gallery
         async function loadFeaturedGallery() {
             const featuredGrid = document.querySelector('.py-12.bg-white .grid');
+            if (!featuredGrid) return;
+            
             const items = await fetchAPI('/gallery/featured');
             
             if (items && items.length > 0) {
-                featuredGrid.innerHTML = items.map(item => `
-                    <div class="relative h-40 rounded-lg overflow-hidden">
-                        <img src="${item.imageUrl}" alt="${item.title}" class="w-full h-full object-cover">
+                featuredGrid.innerHTML = items.slice(0, 4).map(item => `
+                    <div class="relative h-40 rounded-lg overflow-hidden group cursor-pointer">
+                        <img src="${item.imageUrl}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+                        <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-opacity"></div>
                     </div>
                 `).join('');
+            } else {
+                // Show placeholder if no featured images
+                featuredGrid.innerHTML = `
+                    <div class="bg-gray-200 h-40 rounded-lg flex items-center justify-center">
+                        <span class="text-gray-500">Featured Image</span>
+                    </div>
+                    <div class="bg-gray-200 h-40 rounded-lg flex items-center justify-center">
+                        <span class="text-gray-500">Featured Image</span>
+                    </div>
+                    <div class="bg-gray-200 h-40 rounded-lg flex items-center justify-center">
+                        <span class="text-gray-500">Featured Image</span>
+                    </div>
+                    <div class="bg-gray-200 h-40 rounded-lg flex items-center justify-center">
+                        <span class="text-gray-500">Featured Image</span>
+                    </div>
+                `;
             }
         }
         
         // Load Testimonials
         async function loadTestimonials() {
-            const testimonialsGrid = document.querySelector('#testimonials .grid') || 
-                                    document.querySelector('.py-16.bg-white .grid');
+            const testimonialsGrid = document.querySelector('.py-16.bg-white .grid');
+            if (!testimonialsGrid) return;
+            
             const testimonials = await fetchAPI('/testimonials');
             
             if (testimonials && testimonials.length > 0) {
@@ -1117,28 +1217,82 @@
             }
         }
         
-        // Load Settings (Contact Info)
+        // Load Settings (Contact Info & Hero Section)
         async function loadSettings() {
-            const settings = await fetchAPI('/settings');
-            
-            if (settings && settings.contact) {
-                // Update contact information
-                document.querySelectorAll('[data-contact="phone"]').forEach(el => {
-                    if (settings.contact.phone) el.textContent = settings.contact.phone;
-                });
-                document.querySelectorAll('[data-contact="email"]').forEach(el => {
-                    if (settings.contact.email) el.textContent = settings.contact.email;
-                });
-                document.querySelectorAll('[data-contact="address"]').forEach(el => {
-                    if (settings.contact.address) el.textContent = settings.contact.address;
-                });
+            try {
+                const settings = await fetchAPI('/settings');
                 
-                // Update WhatsApp link
-                if (settings.contact.whatsapp) {
-                    document.querySelectorAll('a[href*="wa.me"]').forEach(el => {
-                        el.href = `https://wa.me/${settings.contact.whatsapp}`;
-                    });
+                if (settings) {
+                    console.log('✅ Settings loaded:', settings);
+                    
+                    // Update hero section
+                    if (settings.hero) {
+                        const heroTitle = document.getElementById('hero-title');
+                        const heroSubtitle = document.getElementById('hero-subtitle');
+                        const heroImg = document.getElementById('hero-image');
+                        const heroPlaceholder = document.getElementById('hero-placeholder');
+                        
+                        if (heroTitle && settings.hero.title) {
+                            heroTitle.textContent = settings.hero.title;
+                        }
+                        if (heroSubtitle && settings.hero.subtitle) {
+                            heroSubtitle.textContent = settings.hero.subtitle;
+                        }
+                        if (heroImg && heroPlaceholder && settings.hero.image) {
+                            heroImg.src = settings.hero.image;
+                            heroImg.onload = function() {
+                                heroImg.classList.remove('hidden');
+                                heroPlaceholder.classList.add('hidden');
+                            };
+                        }
+                    }
+                    
+                    // Update about section
+                    if (settings.about) {
+                        const aboutTitle = document.querySelector('#about h2');
+                        const aboutDescriptions = document.querySelectorAll('#about p.text-gray-600');
+                        const aboutImage = document.querySelector('#about .bg-gray-200');
+                        
+                        if (aboutTitle && settings.about.title) {
+                            aboutTitle.textContent = settings.about.title;
+                        }
+                        
+                        if (aboutDescriptions.length > 0 && settings.about.description) {
+                            aboutDescriptions[0].textContent = settings.about.description;
+                        }
+                        
+                        if (aboutImage && settings.about.image) {
+                            aboutImage.innerHTML = `<img src="${settings.about.image}" alt="About Us" class="w-full h-full object-cover rounded-lg">`;
+                        }
+                    }
+                    
+                    // Update contact information
+                    if (settings.contact) {
+                        if (settings.contact.phone) {
+                            document.querySelectorAll('[data-contact="phone"]').forEach(el => {
+                                el.textContent = settings.contact.phone;
+                            });
+                        }
+                        if (settings.contact.email) {
+                            document.querySelectorAll('[data-contact="email"]').forEach(el => {
+                                el.textContent = settings.contact.email;
+                            });
+                        }
+                        if (settings.contact.address) {
+                            document.querySelectorAll('[data-contact="address"]').forEach(el => {
+                                el.textContent = settings.contact.address;
+                            });
+                        }
+                        if (settings.contact.whatsapp) {
+                            const whatsappNumber = settings.contact.whatsapp.replace(/\D/g, '');
+                            document.querySelectorAll('a[href*="wa.me"]').forEach(el => {
+                                el.href = `https://wa.me/${whatsappNumber}`;
+                            });
+                        }
+                    }
                 }
+            } catch (error) {
+                console.error('Failed to load settings:', error);
             }
         }
         
@@ -1147,6 +1301,7 @@
             const galleryImages = document.querySelectorAll('.gallery-image');
             const lightbox = document.getElementById('lightbox');
             const lightboxImage = document.getElementById('lightbox-image');
+            const closeLightbox = document.getElementById('close-lightbox');
             
             galleryImages.forEach(image => {
                 image.addEventListener('click', function() {
@@ -1157,104 +1312,53 @@
                     }
                 });
             });
+            
+            if (lightbox) {
+                lightbox.addEventListener('click', function(e) {
+                    if (e.target === lightbox) {
+                        lightbox.classList.remove('active');
+                    }
+                });
+            }
+            
+            if (closeLightbox) {
+                closeLightbox.addEventListener('click', function() {
+                    lightbox.classList.remove('active');
+                });
+            }
         }
         
-        // Enhanced Booking Form - Send to API
-        const bookingForm = document.getElementById('booking-form');
-        if (bookingForm) {
-            bookingForm.addEventListener('submit', async function(e) {
-                e.preventDefault();
+        // Gallery filter buttons
+        const filterButtons = document.querySelectorAll('[data-filter]');
+        filterButtons.forEach(button => {
+            button.addEventListener('click', async function() {
+                const filter = this.getAttribute('data-filter');
                 
-                // Clear previous errors
-                ['name', 'contact', 'email', 'service', 'date'].forEach(clearError);
+                filterButtons.forEach(btn => {
+                    btn.classList.remove('bg-pink-600', 'text-white');
+                    btn.classList.add('bg-gray-200', 'text-gray-700');
+                });
+                this.classList.remove('bg-gray-200', 'text-gray-700');
+                this.classList.add('bg-pink-600', 'text-white');
                 
-                let isValid = true;
-                
-                // Validate name
-                const name = document.getElementById('name').value.trim();
-                if (name.length < 2) {
-                    showError('name', 'Please enter your full name');
-                    isValid = false;
-                }
-                
-                // Validate contact
-                const contact = document.getElementById('contact').value.trim();
-                if (!validatePhone(contact)) {
-                    showError('contact', 'Please enter a valid phone number');
-                    isValid = false;
-                }
-                
-                // Validate email (if provided)
-                const email = document.getElementById('email').value.trim();
-                if (email && !validateEmail(email)) {
-                    showError('email', 'Please enter a valid email address');
-                    isValid = false;
-                }
-                
-                // Validate service selection
-                const service = document.getElementById('service').value;
-                if (!service) {
-                    showError('service', 'Please select a service');
-                    isValid = false;
-                }
-                
-                // Validate date
-                const date = document.getElementById('date').value;
-                if (!date) {
-                    showError('date', 'Please select a date');
-                    isValid = false;
-                } else {
-                    const selectedDate = new Date(date);
-                    const today = new Date();
-                    today.setHours(0, 0, 0, 0);
-                    
-                    if (selectedDate < today) {
-                        showError('date', 'Please select a future date');
-                        isValid = false;
-                    }
-                }
-                
-                if (!isValid) {
-                    return;
-                }
-                
-                const submitBtn = document.getElementById('submit-btn');
-                submitBtn.disabled = true;
-                submitBtn.textContent = 'Sending...';
-                
-                const formData = new FormData(bookingForm);
-                const bookingData = {
-                    name: formData.get('name'),
-                    contact: formData.get('contact'),
-                    email: formData.get('email'),
-                    service: formData.get('service'),
-                    date: formData.get('date'),
-                    notes: formData.get('notes')
-                };
-                
-                try {
-                    const result = await postAPI('/bookings', bookingData);
-                    showFormMessage('Thank you! Your booking request has been submitted. We will contact you soon.', 'success');
-                    bookingForm.reset();
-                } catch (error) {
-                    showFormMessage('Sorry, there was an error submitting your booking. Please try again or contact us directly.', 'error');
-                } finally {
-                    submitBtn.disabled = false;
-                    submitBtn.textContent = 'Send Booking Request';
-                }
+                await loadGallery(filter);
             });
-        }
+        });
         
         // Load all dynamic content on page load
-        document.addEventListener('DOMContentLoaded', async function() {
-            // Load dynamic content from API
-            await Promise.all([
-                loadFeaturedGallery(),
-                loadGallery(),
-                loadTestimonials(),
-                loadSettings()
-            ]);
-        });
+        async function loadDynamicContent() {
+            try {
+                await Promise.all([
+                    loadSettings(),
+                    loadFeaturedGallery(),
+                    loadGallery('all'),
+                    loadTestimonials()
+                ]);
+                console.log('✅ All content loaded');
+            } catch (error) {
+                console.error('❌ Error loading content:', error);
+            }
+        }
     </script>
 </body>
 </html>
